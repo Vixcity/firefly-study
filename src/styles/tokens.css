@@ -1,13 +1,18 @@
 /* ==========================================================================
    萤火书房 · 设计令牌
-   一套"夜晚书房"的配色：暗夜蓝作底，暖黄作光，橙红点缀。
-   主题 / 萤火虫配色 / 光合树形态都通过 <html> 上的 data-* 属性切换，纯 CSS 生效。
+   默认是一套"夜晚书房"的配色：暗夜蓝作底，暖黄作光，橙红点缀。
+   主题 / 萤火虫配色 / 光合树形态 / 明暗模式都通过 <html> 上的 data-* 属性切换，纯 CSS 生效。
+   明暗模式有两个值：data-scheme="dark"（默认）| data-scheme="light"。
+   「自动」由 JS 解析成这两个值之后再落到属性上，CSS 这边不需要知道"自动"是什么。
    ========================================================================== */
 
 :root {
   /* ---- 底色（由主题覆盖） ---- */
   --fs-bg-top: #17203a;
   --fs-bg-bottom: #070a15;
+  /* 页面渐变最下面那一段，以及桌面端 .fs-root 外面那圈"相框" */
+  --fs-bg-deep: #04060c;
+  --fs-bg-frame: #05070d;
   --fs-glow: rgba(255, 217, 138, 0.16);
   --fs-accent: #ffd98a;
   --fs-accent-soft: rgba(255, 217, 138, 0.14);
@@ -38,6 +43,24 @@
   --fs-line-strong: rgba(255, 255, 255, 0.14);
   --fs-sunken: rgba(0, 0, 0, 0.26);
 
+  /* ---- 外壳玻璃 / 弹层：颜色都在这里收口，明暗模式各给一套 ----
+     之前这些值散在 base.css、tabbar.css、antd-mobile-override.css、tour.css 里写死，
+     日间模式没法整体换掉，所以提到令牌层。 */
+  --fs-chrome-bar: linear-gradient(180deg, rgba(9, 13, 23, 0.97) 0%, rgba(9, 13, 23, 0.9) 100%);
+  --fs-chrome-bar-shadow: 0 10px 20px -14px rgba(0, 0, 0, 0.95);
+  --fs-chrome-tabbar: linear-gradient(180deg, rgba(7, 10, 18, 0.72) 0%, rgba(6, 9, 16, 0.96) 42%);
+  --fs-popup: linear-gradient(180deg, #131b2e 0%, #0a0f1c 100%);
+  --fs-toast: rgba(20, 28, 46, 0.94);
+  --fs-scrim: rgba(3, 5, 10, 0.78);
+  /* 点亮仪式 / 结算这类"整屏压暗"的底 */
+  --fs-scrim-strong: linear-gradient(180deg, rgba(6, 10, 18, 0.94) 0%, rgba(4, 6, 12, 0.98) 100%);
+  --fs-tour-card: linear-gradient(180deg, #151d31 0%, #0b1120 100%);
+  /* 点亮的小圆点 / 柱子外面的那圈光：夜里是发光，白天得压一圈暖边才看得见 */
+  --fs-lit-halo: 0 0 9px 2px var(--fs-f2);
+  /* 书本封面的阴影（封面本身是深色的，明暗模式都不用换） */
+  --fs-cover-shadow: -1px 1px 6px rgba(0, 0, 0, 0.45);
+
+
   /* ---- 圆角 ---- */
   --fs-r-xs: 8px;
   --fs-r-sm: 12px;
@@ -55,6 +78,20 @@
   --fs-s6: 28px;
   --fs-s7: 36px;
   --fs-s8: 48px;
+
+  /* ---- 页面节奏：所有页面共用同一套上下间距，改这里就全局生效 ----
+     之前每个页面各写各的 margin —— 顶部栏到第一块内容的距离，
+     书房是 0px、书库 4px、荣光 12px、报告 0px、商店 12px，看起来就是"上间距不统一"。
+     现在统一由下面这几个变量决定： */
+  --fs-page-pad-top: calc(var(--fs-safe-top) + var(--fs-s4)); /* 顶部栏的上内边距 */
+  --fs-topbar-pad-bottom: var(--fs-s3); /* 顶部栏的下内边距（毛玻璃只包住标题，保持原样） */
+  /* 顶部栏与下面第一块内容的距离。这里用**下外边距**给，不用下内边距 ——
+     用内边距的话毛玻璃会跟着一起变高，标题下面挂着一大片实心色；
+     用外边距，留白就是页面自己的底色，跟"顶部到第一块内容"的间隔本来就是一回事。
+     取值和滚动区底部留白一致，一屏的上下呼吸感是对称的。 */
+  --fs-topbar-gap: var(--fs-page-pad-bottom);
+  --fs-page-gap: var(--fs-s4); /* 相邻区块之间的统一间距 */
+  --fs-page-pad-bottom: var(--fs-s6); /* 滚动区底部留白（Tab 栏在流内，不用再补安全区） */
 
   /* ---- 光效 ---- */
   --fs-glow-sm: 0 0 12px rgba(255, 217, 138, 0.35);
@@ -126,6 +163,97 @@
   --fs-accent-deep: #5a94c9;
 }
 
+/* ============================ 日间模式 ============================
+   日间不是"把夜间调亮"，而是另一间屋子：白天的书房。
+   三条规则：
+   1. 底色换成暖白（墙是浅的、窗是透光的），文字换成深褐，不然灰底上的浅字根本看不清；
+   2. --fs-accent 在日间要同时当"文字色"，所以必须换成能读的深色（原来是浅黄，只能当光用）；
+   3. 玻璃外壳（顶栏 / Tab 栏 / 弹层 / 遮罩）各给一套浅色，避免深色方框糊在浅底上。
+   萤火虫的配色（--fs-f1/f2/f3）不动 —— 那是用户自己挑的光，日间也照样亮着。 */
+
+:root[data-scheme='light'] {
+  color-scheme: light;
+
+  --fs-bg-top: #f8f3e9;
+  --fs-bg-bottom: #ece4d6;
+  --fs-bg-deep: #efe8da;
+  --fs-bg-frame: #e3dac9;
+
+  --fs-glow: rgba(255, 197, 96, 0.3);
+  --fs-accent: #a4680f;
+  --fs-accent-soft: rgba(164, 104, 15, 0.12);
+  --fs-accent-line: rgba(164, 104, 15, 0.3);
+  --fs-accent-deep: #7c4b06;
+
+  --fs-leaf: #4f9a6d;
+  --fs-leaf-deep: #2f6b4a;
+  --fs-bloom: #cf8f16;
+  --fs-trunk: #8b6a45;
+
+  --fs-text: #322818;
+  --fs-text-2: rgba(50, 40, 24, 0.76);
+  --fs-text-3: rgba(50, 40, 24, 0.56);
+  --fs-text-4: rgba(50, 40, 24, 0.4);
+
+  --fs-card: rgba(255, 253, 247, 0.72);
+  --fs-card-2: rgba(255, 253, 247, 0.94);
+  --fs-line: rgba(92, 72, 44, 0.14);
+  --fs-line-strong: rgba(92, 72, 44, 0.26);
+  --fs-sunken: rgba(120, 98, 60, 0.1);
+
+  --fs-chrome-bar: linear-gradient(180deg, rgba(250, 245, 236, 0.97) 0%, rgba(247, 241, 231, 0.9) 100%);
+  --fs-chrome-bar-shadow: 0 10px 20px -16px rgba(120, 96, 60, 0.6);
+  --fs-chrome-tabbar: linear-gradient(180deg, rgba(245, 239, 228, 0.76) 0%, rgba(240, 233, 221, 0.97) 42%);
+  --fs-popup: linear-gradient(180deg, #fdfaf4 0%, #f3ece0 100%);
+  --fs-toast: rgba(252, 248, 240, 0.96);
+  --fs-scrim: rgba(74, 58, 34, 0.42);
+  --fs-scrim-strong: linear-gradient(180deg, rgba(250, 245, 236, 0.94) 0%, rgba(243, 236, 224, 0.98) 100%);
+  --fs-tour-card: linear-gradient(180deg, #fdfaf4 0%, #f2ebdf 100%);
+
+  --fs-glow-sm: 0 0 12px rgba(164, 104, 15, 0.2);
+  --fs-glow-md: 0 0 28px rgba(164, 104, 15, 0.22);
+  --fs-glow-lg: 0 0 64px rgba(164, 104, 15, 0.18);
+  --fs-shadow-card: 0 12px 30px rgba(96, 74, 42, 0.14);
+  /* 浅底上，光点外面要靠一圈深一点的暖边才立得起来 */
+  --fs-lit-halo: 0 0 0 1px rgba(122, 92, 26, 0.34), 0 0 10px 1px rgba(190, 130, 30, 0.5);
+}
+
+/* 四个书房主题各自的日间版：底色调性留住，颜色压深到能读 */
+:root[data-scheme='light'][data-theme='theme_forest'] {
+  --fs-bg-top: #eef5ee;
+  --fs-bg-bottom: #dde8de;
+  --fs-bg-deep: #e5eee5;
+  --fs-glow: rgba(120, 214, 160, 0.3);
+  --fs-accent: #2f7d53;
+  --fs-accent-soft: rgba(47, 125, 83, 0.12);
+  --fs-accent-line: rgba(47, 125, 83, 0.3);
+  --fs-accent-deep: #1f5c3b;
+  --fs-leaf: #3d8f63;
+  --fs-leaf-deep: #276147;
+}
+
+:root[data-scheme='light'][data-theme='theme_starry'] {
+  --fs-bg-top: #eff1fb;
+  --fs-bg-bottom: #e0e3f4;
+  --fs-bg-deep: #e7eaf7;
+  --fs-glow: rgba(140, 160, 255, 0.32);
+  --fs-accent: #4a5fc0;
+  --fs-accent-soft: rgba(74, 95, 192, 0.12);
+  --fs-accent-line: rgba(74, 95, 192, 0.3);
+  --fs-accent-deep: #33449a;
+}
+
+:root[data-scheme='light'][data-theme='theme_rain'] {
+  --fs-bg-top: #eef3f9;
+  --fs-bg-bottom: #dde6ef;
+  --fs-bg-deep: #e4ecf4;
+  --fs-glow: rgba(120, 180, 240, 0.32);
+  --fs-accent: #2a6b9c;
+  --fs-accent-soft: rgba(42, 107, 156, 0.12);
+  --fs-accent-line: rgba(42, 107, 156, 0.3);
+  --fs-accent-deep: #1b4e75;
+}
+
 /* ============================ 萤火虫配色 ============================ */
 
 :root[data-firefly='firefly_cyan'] {
@@ -173,6 +301,19 @@
   --fs-trunk: #8d9cb5;
 }
 
+/* 日间的两种树形态：叶色压深一档，否则浅色叶子会消失在暖白底上 */
+:root[data-scheme='light'][data-tree='tree_glow'] {
+  --fs-leaf: #3f9b73;
+  --fs-leaf-deep: #2b7154;
+  --fs-trunk: #7a6449;
+}
+:root[data-scheme='light'][data-tree='tree_crystal'] {
+  --fs-leaf: #6f9dc9;
+  --fs-leaf-deep: #3f6f9e;
+  --fs-bloom: #7fa8cf;
+  --fs-trunk: #7c8798;
+}
+
 /* ============================ 低端机 / 省电：关掉常驻动画 ============================ */
 
 :root[data-motion='reduce'] .fs-drift,
@@ -193,10 +334,15 @@
   }
 }
 
-/* ============================ antd-mobile 变量接入 ============================ */
+/* ============================ antd-mobile 变量接入 ============================
+   这些值原来挂在 ":root, :root[data-prefers-color-scheme='dark']" 上，
+   等于把"暗色"焊死在 :root 上，日间模式永远翻不过来。
+   现在拆成两套：默认（也就是 data-scheme="dark"）一套、data-scheme="light" 一套。
+   data-prefers-color-scheme 由 useThemeSync 跟着 data-scheme 一起写，
+   这样 antd-mobile 自己内置的深色变量也能对上。 */
 
 :root,
-:root[data-prefers-color-scheme='dark'] {
+:root[data-scheme='dark'] {
   --adm-color-primary: var(--fs-accent);
   --adm-color-success: #82e8b4;
   --adm-color-warning: #ffc46b;
@@ -225,3 +371,25 @@
   --adm-mask-background-color: rgba(4, 7, 14, 0.72);
   --adm-color-mask: rgba(4, 7, 14, 0.72);
 }
+
+:root[data-scheme='light'] {
+  --adm-color-primary: var(--fs-accent);
+  --adm-color-success: #2f8a5b;
+  --adm-color-warning: #b3761a;
+  --adm-color-danger: #c0503e;
+  --adm-color-white: #ffffff;
+  --adm-color-text: var(--fs-text);
+  --adm-color-text-secondary: var(--fs-text-2);
+  --adm-color-weak: var(--fs-text-3);
+  --adm-color-light: var(--fs-text-4);
+  --adm-color-border: var(--fs-line);
+  --adm-color-background: #fbf7ef;
+  --adm-color-box: rgba(92, 72, 44, 0.06);
+  --adm-color-fill-content: rgba(92, 72, 44, 0.06);
+  --adm-color-highlight: var(--fs-accent);
+  --adm-font-family: var(--fs-font);
+
+  --adm-mask-background-color: rgba(74, 58, 34, 0.42);
+  --adm-color-mask: rgba(74, 58, 34, 0.42);
+}
+

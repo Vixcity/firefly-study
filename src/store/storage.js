@@ -1,3 +1,4 @@
+import { COLOR_SCHEME_VALUES } from './constants'
 import { STATE_VERSION, STORAGE_KEY, createInitialState } from './initialState'
 
 /**
@@ -64,6 +65,10 @@ export function normalize(raw) {
     ? data.cosmetic.owned
     : base.cosmetic.owned
   data.settings = { ...base.settings, ...(data.settings || {}) }
+  // 明暗模式只认这三个值：旧数据没这个字段（用初始值兜底）、备份里写坏了也不会让界面崩
+  if (!COLOR_SCHEME_VALUES.includes(data.settings.scheme)) {
+    data.settings.scheme = base.settings.scheme
+  }
   data.reminder = { ...base.reminder, ...(data.reminder || {}) }
   data.tour = { ...base.tour, ...(data.tour || {}) }
   data.reading = data.reading || null

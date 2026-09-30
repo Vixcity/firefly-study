@@ -15,7 +15,7 @@
 .tour__hole {
   position: fixed;
   border-radius: var(--fs-r-md);
-  box-shadow: 0 0 0 9999px rgba(3, 5, 10, 0.78);
+  box-shadow: 0 0 0 9999px var(--fs-scrim);
   border: 1.5px solid var(--fs-accent);
   outline: 6px solid var(--fs-accent-soft);
   transition: all 260ms var(--fs-ease-out);
@@ -30,7 +30,7 @@
 .tour__dim {
   position: fixed;
   inset: 0;
-  background: rgba(3, 5, 10, 0.82);
+  background: var(--fs-scrim);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
@@ -43,7 +43,7 @@
   max-width: 460px;
   padding: var(--fs-s4) var(--fs-s4) var(--fs-s3);
   border-radius: var(--fs-r-lg);
-  background: linear-gradient(180deg, #151d31 0%, #0b1120 100%);
+  background: var(--fs-tour-card);
   border: 1px solid var(--fs-accent-line);
   box-shadow: 0 22px 60px -24px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
   opacity: 0;

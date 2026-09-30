@@ -8,7 +8,7 @@
   justify-content: flex-end;
   background:
     radial-gradient(100% 52% at 50% 18%, var(--fs-glow) 0%, transparent 62%),
-    linear-gradient(180deg, #0b1120 0%, #070b14 52%, #04060c 100%);
+    linear-gradient(180deg, var(--fs-bg-top) 0%, var(--fs-bg-bottom) 52%, var(--fs-bg-deep) 100%);
 }
 
 .onboard__glow {

@@ -6,9 +6,7 @@
   padding-top: 0;
 }
 
-.study__top {
-  padding-bottom: var(--fs-s2);
-}
+/* 顶部栏的上下内边距统一走 --fs-page-pad-top / --fs-topbar-gap，这里不再单独覆盖 */
 
 .study__points {
   display: inline-flex;
@@ -32,14 +30,16 @@
 .study__caption {
   display: flex;
   justify-content: space-between;
-  padding: 8px 4px 0;
+  /* 它是场景的说明文字，紧跟场景而不是跟页面节奏 */
+  margin-top: var(--fs-s2);
+}
+
+/* 卡片内部：连击数字与 7 天圆点之间的距离 */
+.study__dots {
+  margin-top: var(--fs-s4);
 }
 
 /* ---------------- 今天 ---------------- */
-
-.study__today {
-  margin-top: var(--fs-s4);
-}
 
 .study__today-sec {
   font-size: var(--fs-fz-xl);
@@ -147,10 +147,3 @@
 
 /* ---------------- 记录 / 等级 ---------------- */
 
-.study__records {
-  margin-top: var(--fs-s5);
-}
-
-.study__level {
-  margin-top: var(--fs-s5);
-}

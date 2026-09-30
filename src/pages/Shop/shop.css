@@ -20,10 +20,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.shop__rules {
-  margin-top: var(--fs-s3);
-}
-
 .shop__rulelist {
   list-style: none;
   padding: 0;
@@ -78,6 +74,13 @@
   display: grid;
   place-items: center;
   overflow: hidden;
+}
+
+/* 日间的配色小样：别用黑色叠出一块脏灰，换成和白天墙面同一个暖砂调 */
+:root[data-scheme='light'] .shop__preview {
+  background:
+    radial-gradient(70% 60% at 50% 40%, rgba(255, 255, 255, 0.34), transparent 70%),
+    linear-gradient(180deg, #b9ad97, #a2957e);
 }
 
 .shop__preview--theme {

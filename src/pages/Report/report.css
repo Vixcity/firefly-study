@@ -6,10 +6,6 @@
   padding-top: 0;
 }
 
-.report__hero {
-  margin-top: var(--fs-s4);
-}
-
 .report__hero-label {
   font-size: var(--fs-fz-xs);
   color: var(--fs-text-3);
@@ -82,18 +78,8 @@
   line-height: 1.8;
 }
 
-.report__chart,
-.report__books,
-.report__share {
-  margin-top: var(--fs-s5);
-}
-
 .report__books .row:last-child {
   border-bottom: none;
-}
-
-.report__total {
-  margin-top: var(--fs-s5);
 }
 
 .report__total-grid {

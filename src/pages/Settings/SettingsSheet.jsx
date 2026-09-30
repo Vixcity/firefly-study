@@ -3,13 +3,15 @@ import { Dialog, Switch, Toast } from 'antd-mobile'
 import dayjs from 'dayjs'
 import { useApp } from '../../store/store'
 import { Sheet } from '../../components/ui/Sheet'
+import { Segmented } from '../../components/ui/Segmented'
 import { Icon } from '../../components/icons/Icons'
-import { REMINDER_COPIES } from '../../store/constants'
+import { COLOR_SCHEMES, DEFAULT_SCHEME, REMINDER_COPIES } from '../../store/constants'
+import { SCHEME_AUTO, SCHEME_DARK, SCHEME_LIGHT, useResolvedScheme } from '../../hooks/useScheme'
 import { exportFileName, exportState, importState, storageAvailable } from '../../store/storage'
 import { downloadDataUrl } from '../../lib/shareCard'
 import './settings.css'
 
-/** 设置：温柔提醒、动效、数据备份 */
+/** 设置：明暗模式、温柔提醒、动效、数据备份 */
 export function SettingsSheet({ visible, onClose }) {
   const { state, actions, storageWarning } = useApp()
   const { settings } = state
@@ -91,8 +93,40 @@ export function SettingsSheet({ visible, onClose }) {
   const nextCopy = REMINDER_COPIES[(settings.reminderCopyIndex || 0) % REMINDER_COPIES.length]
   const today = dayjs().format('YYYY-MM-DD')
 
+  // ---- 明暗模式：「自动」由 useResolvedScheme 实时解析成日间 / 夜间 ----
+  const scheme = settings.scheme || DEFAULT_SCHEME
+  const resolvedScheme = useResolvedScheme(scheme)
+  const schemeDesc =
+    scheme === SCHEME_AUTO
+      ? `跟着系统走，现在用的是${resolvedScheme === SCHEME_LIGHT ? '日间' : '夜间'}`
+      : scheme === SCHEME_LIGHT
+        ? '白天的书房：窗户透光，萤火虫还在'
+        : '最初的那间夜晚书房'
+  const schemeGlyph =
+    scheme === SCHEME_LIGHT ? 'sun' : scheme === SCHEME_DARK ? 'moon' : 'sunrise'
+
   return (
     <Sheet visible={visible} onClose={onClose} title="设置">
+      {/* ---- 明暗模式 ---- */}
+      <section className="settings__block">
+        <div className="row">
+          <div className="row__glyph">
+            <Icon name={schemeGlyph} size={17} />
+          </div>
+          <div className="row__main">
+            <div className="row__title">明暗模式</div>
+            <div className="row__sub">{schemeDesc}</div>
+          </div>
+        </div>
+        <div className="settings__scheme">
+          <Segmented
+            value={scheme}
+            onChange={(v) => actions.updateSettings({ scheme: v })}
+            options={COLOR_SCHEMES.map((s) => ({ value: s.value, label: s.label }))}
+          />
+        </div>
+      </section>
+
       {/* ---- 温柔提醒 ---- */}
       <section className="settings__block">
         <div className="row">

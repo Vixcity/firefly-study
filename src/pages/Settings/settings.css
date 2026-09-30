@@ -37,6 +37,11 @@
   font-size: var(--fs-fz-sm);
 }
 
+/* 明暗模式的三选一：和上面的说明行拉开一点距离 */
+.settings__scheme {
+  margin-top: var(--fs-s3);
+}
+
 .settings__ops {
   display: flex;
   gap: var(--fs-s3);

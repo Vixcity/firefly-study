@@ -9,6 +9,8 @@
 - 技术：React 19 + Vite 8 + antd-mobile 5 + dayjs + vite-plugin-pwa
 - 数据：全部存在浏览器本地（`localStorage`），无后端、无登录，支持导出 JSON 备份
 - 新手引导：首次进入是一屏欢迎页，接着在书房里用**聚光高亮**逐步讲 7 步，随时可从设置重看
+- 明暗模式：设置里可选 **自动 / 日间 / 夜间**（默认夜间）。日间是「白天的书房」——
+  窗外是蓝天和太阳，屋里照样有萤火虫，只是换了个光。
 
 ---
 
@@ -117,7 +119,7 @@ src/
 │  ├─ TourOverlay.jsx       新手引导巡览（聚光高亮 + 说明卡）
 │  └─ layout/TabBar.jsx     底部导航
 ├─ pages/                   书房 / 书库 / 荣光 / 报告 / 商店 / 设置 / 引导
-├─ hooks/                   useNow / useThemeSync / useReminder
+├─ hooks/                   useNow / useThemeSync / useScheme / useReminder
 └─ lib/                     date / format / id / rand / shareCard / antdReact19
 ```
 

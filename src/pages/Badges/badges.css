@@ -6,10 +6,6 @@
   padding-top: 0;
 }
 
-.badges__level {
-  margin-top: var(--fs-s3);
-}
-
 .badges__level-glyph {
   color: var(--fs-accent);
   display: grid;

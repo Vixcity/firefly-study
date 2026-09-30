@@ -31,7 +31,7 @@ body {
   /* 竖屏手机优先，桌面上居中成一个"手机宽度"的容器 */
   display: flex;
   justify-content: center;
-  background: #05070d;
+  background: var(--fs-bg-frame);
 }
 
 #root {
@@ -44,7 +44,7 @@ body {
   position: relative;
   background:
     radial-gradient(120% 62% at 50% -8%, var(--fs-glow) 0%, transparent 62%),
-    linear-gradient(180deg, var(--fs-bg-top) 0%, var(--fs-bg-bottom) 58%, #04060c 100%);
+    linear-gradient(180deg, var(--fs-bg-top) 0%, var(--fs-bg-bottom) 58%, var(--fs-bg-deep) 100%);
   overflow: hidden;
 }
 
@@ -94,9 +94,8 @@ textarea {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  /* Tab 栏已经在 flex 流里，这里只需要留出视觉呼吸空间，
-     末尾再补一段安全区，避免内容紧贴 Tab 栏 */
-  padding-bottom: var(--fs-s5);
+  /* 页面底部留白统一在这里给，页面里不用再放占位元素 */
+  padding-bottom: var(--fs-page-pad-bottom);
 }
 
 .fs-scroll::-webkit-scrollbar,
@@ -106,9 +105,29 @@ textarea {
   display: none;
 }
 
+/* ============================ 页面节奏 ============================ */
+/*
+   间距只允许有一个来源，页面里不要再写 margin-top：
+   1. 顶部栏上内边距 --fs-page-pad-top（含状态栏安全区）
+   2. 顶部栏下外边距 --fs-topbar-gap → 决定第一块内容离顶部栏多远
+   3. 相邻区块之间 --fs-page-gap
+   4. 滚动区底部留白 --fs-page-pad-bottom
+   否则又会退回"每个页面间距都不一样"的状态。
+*/
+
 .fs-page {
   padding: 0 var(--fs-s4);
   animation: fs-page-in var(--fs-t) var(--fs-ease-out);
+}
+
+/* 相邻区块之间统一间距 */
+.fs-page > * + * {
+  margin-top: var(--fs-page-gap);
+}
+
+/* 顶部栏后的第一块内容不再叠加间距：它离顶部栏的距离由顶部栏的下外边距决定 */
+.fs-page > .fs-topbar + * {
+  margin-top: 0;
 }
 
 .fs-topbar {
@@ -116,15 +135,16 @@ textarea {
   top: 0;
   z-index: 20;
   /* 通栏：用负外边距抵消 .fs-page 的左右内边距，
-     这样吸顶时毛玻璃背景能铺满整屏宽度，文字位置又和下面内容对齐 */
-  margin: 0 calc(-1 * var(--fs-s4));
-  padding: calc(var(--fs-safe-top) + var(--fs-s4)) var(--fs-s4) var(--fs-s3);
+     这样吸顶时毛玻璃背景能铺满整屏宽度，文字位置又和下面内容对齐。
+     下外边距 = 与第一块内容的距离（留白露出的是页面底色，不是玻璃）。 */
+  margin: 0 calc(-1 * var(--fs-s4)) var(--fs-topbar-gap);
+  padding: var(--fs-page-pad-top) var(--fs-s4) var(--fs-topbar-pad-bottom);
   display: flex;
   align-items: center;
   gap: var(--fs-s3);
   /* 实心毛玻璃：渐变到透明会让下方滚过的文字透上来，看起来像渲染错误 */
-  background: linear-gradient(180deg, rgba(9, 13, 23, 0.97) 0%, rgba(9, 13, 23, 0.9) 100%);
-  box-shadow: 0 10px 20px -14px rgba(0, 0, 0, 0.95);
+  background: var(--fs-chrome-bar);
+  box-shadow: var(--fs-chrome-bar-shadow);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -200,7 +220,8 @@ textarea {
 }
 
 .fs-section {
-  margin-top: var(--fs-s5);
+  /* 和相邻区块用同一个间距，不再单独用 s5 */
+  margin-top: var(--fs-page-gap);
 }
 
 .fs-section__head {
@@ -371,6 +392,27 @@ textarea {
   color: #82e8b4;
 }
 
+/* ============================ 日间模式的局部修正 ============================
+   令牌层能搞定的都在 tokens.css 里；这里只补「浅底上会直接读不清 / 看不出光」的几处。
+   主按钮和薄荷色芯片原本是为暗色底配的浅色，翻到浅底上要用更实的暖色才像"亮着的"。 */
+
+:root[data-scheme='light'] .fs-btn--primary {
+  color: #33230a;
+  background: linear-gradient(135deg, #ffe1a4 0%, #efbb5a 46%, #cd9130 100%);
+  box-shadow: 0 10px 26px -12px rgba(150, 102, 22, 0.6), 0 0 0 1px rgba(160, 110, 30, 0.28) inset;
+}
+
+:root[data-scheme='light'] .fs-btn--danger {
+  color: #b8452f;
+  border-color: rgba(184, 69, 47, 0.32);
+}
+
+:root[data-scheme='light'] .fs-chip--ok {
+  background: rgba(47, 138, 91, 0.12);
+  border-color: rgba(47, 138, 91, 0.3);
+  color: #2b7a52;
+}
+
 /* ============================ 分隔 ============================ */
 
 .fs-hr {
@@ -409,13 +451,8 @@ textarea {
   gap: var(--fs-s3);
 }
 
-/* ============================ 页面收尾留白 ============================ */
-
-/* Tab 栏已经在 flex 流里并自己处理了安全区，
-   这里只需要给内容末尾一段舒适的呼吸空间 */
-.fs-safe-bottom {
-  height: var(--fs-s5);
-}
+/* 页面收尾留白已经统一交给 .fs-scroll 的 padding-bottom，
+   页面里不再需要占位元素（避免和滚动区留白叠成两层）。 */
 
 /* ============================ 弹层 ============================ */
 

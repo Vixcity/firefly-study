@@ -91,7 +91,7 @@ export function ShopPage() {
         </p>
       </section>
 
-      <div style={{ margin: 'var(--fs-s4) 0' }}>
+      <div>
         <Segmented value={kind} onChange={setKind} options={KINDS} />
       </div>
 
@@ -135,7 +135,6 @@ export function ShopPage() {
         })}
       </div>
 
-      <div className="fs-safe-bottom" />
 
       {/* 试色 / 试灯 */}
       <Sheet visible={!!preview} onClose={() => setPreview(null)} title={preview ? preview.name : ''}>

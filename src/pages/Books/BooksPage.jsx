@@ -71,7 +71,7 @@ export function BooksPage({ onStartReading }) {
         </button>
       </header>
 
-      <div style={{ margin: '4px 0 var(--fs-s4)' }}>
+      <div>
         <Segmented
           value={filter}
           onChange={setFilter}
@@ -91,7 +91,7 @@ export function BooksPage({ onStartReading }) {
           {filter === 'finished'
             ? '还没有读完的书。读着读着，总会读完的。'
             : '书架还空着。加一本在读的，或者干脆先开始阅读也可以。'}
-          <div style={{ marginTop: 'var(--fs-s4)' }}>
+          <div className="books__empty-cta">
             <button type="button" className="fs-btn fs-btn--primary fs-btn--sm" onClick={() => setAdding(true)}>
               <Icon name="plus" size={15} />
               加一本书
@@ -201,7 +201,6 @@ export function BooksPage({ onStartReading }) {
         </section>
       ) : null}
 
-      <div className="fs-safe-bottom" />
 
       <BookForm
         visible={adding}

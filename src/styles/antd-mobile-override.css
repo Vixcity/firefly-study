@@ -29,7 +29,7 @@
 
 /* Dialog */
 .adm-dialog-body {
-  background: linear-gradient(180deg, #131b2e 0%, #0a0f1c 100%);
+  background: var(--fs-popup);
   border: 1px solid var(--fs-line);
 }
 
@@ -53,7 +53,7 @@
 
 /* Toast */
 .adm-toast-main {
-  background: rgba(20, 28, 46, 0.94);
+  background: var(--fs-toast);
   border: 1px solid var(--fs-accent-line);
   color: var(--fs-text);
   box-shadow: 0 10px 30px -12px var(--fs-accent);
@@ -63,7 +63,7 @@
 }
 
 .adm-toast-mask .adm-toast-main {
-  background: rgba(20, 28, 46, 0.94);
+  background: var(--fs-toast);
 }
 
 /* Switch / Slider 用主题色 */

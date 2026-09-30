@@ -47,7 +47,7 @@ export function StudyPage({ onOpenSettings, onOpenShop, onStartReading }) {
 
   return (
     <div className="fs-page study">
-      <header className="fs-topbar study__top">
+      <header className="fs-topbar">
         <div className="fs-grow">
           <h1 className="fs-topbar__title">{greeting()}</h1>
           <p className="fs-topbar__sub">
@@ -58,29 +58,37 @@ export function StudyPage({ onOpenSettings, onOpenShop, onStartReading }) {
           <Icon name="coin" size={15} />
           <span className="fs-num">{state.points.balance}</span>
         </button>
-        <button type="button" className="fs-iconbtn" onClick={onOpenSettings} aria-label="设置">
+        <button
+          type="button"
+          className="fs-iconbtn study__settings"
+          onClick={onOpenSettings}
+          aria-label="设置"
+        >
           <Icon name="settings" size={19} />
         </button>
       </header>
 
-      <StudyScene
-        fireflies={fireflies}
-        books={state.books}
-        light={light}
-        treeStage={tree.stage}
-        treeSleeping={tree.sleeping}
-        todayLit={todayLit}
-        todayKey={today}
-        theme={state.cosmetic.theme}
-        reduceMotion={state.settings.reduceMotion}
-        onPickFirefly={setDetailDate}
-      />
+      {/* 场景和它的说明文字算一个区块，这样说明紧贴场景、整块再和下一张卡保持统一间距 */}
+      <div className="study__scene">
+        <StudyScene
+          fireflies={fireflies}
+          books={state.books}
+          light={light}
+          treeStage={tree.stage}
+          treeSleeping={tree.sleeping}
+          todayLit={todayLit}
+          todayKey={today}
+          theme={state.cosmetic.theme}
+          reduceMotion={state.settings.reduceMotion}
+          onPickFirefly={setDetailDate}
+        />
 
-      <div className="study__caption">
-        <span className="fs-tiny fs-muted">
-          {fireflies.length} 只萤火虫 · 房间亮度 {Math.round(light * 100)}%
-        </span>
-        <span className="fs-tiny fs-muted">{formatDurationTight(stats.totalSec)} 累计</span>
+        <div className="study__caption">
+          <span className="fs-tiny fs-muted">
+            {fireflies.length} 只萤火虫 · 房间亮度 {Math.round(light * 100)}%
+          </span>
+          <span className="fs-tiny fs-muted">{formatDurationTight(stats.totalSec)} 累计</span>
+        </div>
       </div>
 
       {/* ---- 今天 ---- */}
@@ -133,7 +141,8 @@ export function StudyPage({ onOpenSettings, onOpenShop, onStartReading }) {
           </div>
         </div>
 
-        <div style={{ marginTop: 'var(--fs-s4)' }}>
+        {/* 卡片内部的间距，和页面级节奏无关 */}
+        <div className="study__dots">
           <DayDots days={streak.recent} onPick={setDetailDate} />
         </div>
 
@@ -252,7 +261,6 @@ export function StudyPage({ onOpenSettings, onOpenShop, onStartReading }) {
         </div>
       </section>
 
-      <div className="fs-safe-bottom" />
 
       {detailDate ? <DayDetailSheet date={detailDate} onClose={() => setDetailDate(null)} /> : null}
     </div>

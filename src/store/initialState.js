@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { DEFAULT_SCHEME } from './constants'
 import { DEFAULT_COSMETIC } from './catalog'
 import { initialStreak } from './rules/streak'
 
@@ -52,6 +53,11 @@ export function createInitialState(now = Date.now()) {
       reminderCopyIndex: 0,
       /** 低端机 / 省电模式：关掉大部分常驻动画 */
       reduceMotion: false,
+      /**
+       * 明暗模式：'auto' 跟着系统 | 'light' 日间 | 'dark' 夜间。
+       * 默认留在夜间 —— 这里本来就是"夜晚的书房"，白天想换风格的人可以自己去设置里切。
+       */
+      scheme: DEFAULT_SCHEME,
       /** 是否已经在设置里看过"数据只存在本机"的说明 */
       privacyNoted: false,
     },

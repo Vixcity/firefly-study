@@ -40,7 +40,7 @@
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--fs-line-strong);
   transition: background var(--fs-t) var(--fs-ease), box-shadow var(--fs-t) var(--fs-ease);
 }
 
@@ -52,7 +52,7 @@
 
 .dots__dot.is-lit .dots__core {
   background: radial-gradient(circle at 40% 36%, var(--fs-f1), var(--fs-f2) 62%, var(--fs-f3));
-  box-shadow: 0 0 9px 2px var(--fs-f2);
+  box-shadow: var(--fs-lit-halo);
 }
 
 .dots__dot.is-lit .dots__label {
@@ -70,7 +70,7 @@
 }
 
 .dots__dot.is-quiet .dots__core {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--fs-line);
 }
 
 .dots__dot.is-today .dots__core {
@@ -82,7 +82,7 @@
 }
 
 .dots__dot.is-today.is-lit .dots__core {
-  box-shadow: 0 0 10px 2px var(--fs-f2), 0 0 0 3px var(--fs-accent-line);
+  box-shadow: var(--fs-lit-halo), 0 0 0 3px var(--fs-accent-line);
 }
 
 .dots--compact .dots__label {
@@ -126,13 +126,13 @@
   max-width: 16px;
   min-height: 3px;
   border-radius: var(--fs-r-full);
-  background: rgba(255, 255, 255, 0.13);
+  background: var(--fs-line-strong);
   transition: height var(--fs-t) var(--fs-ease-out);
 }
 
 .bars__bar.is-lit {
   background: linear-gradient(180deg, var(--fs-f1) 0%, var(--fs-f2) 62%, var(--fs-f3) 100%);
-  box-shadow: 0 0 10px -1px var(--fs-f2);
+  box-shadow: var(--fs-lit-halo);
 }
 
 .bars__bar.is-rest {
@@ -236,7 +236,7 @@
 .pbar {
   height: 6px;
   border-radius: var(--fs-r-full);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--fs-line-strong);
   overflow: hidden;
 }
 
@@ -244,7 +244,7 @@
   height: 100%;
   border-radius: var(--fs-r-full);
   background: linear-gradient(90deg, var(--fs-f3) 0%, var(--fs-f1) 100%);
-  box-shadow: 0 0 10px -1px var(--fs-f2);
+  box-shadow: var(--fs-lit-halo);
   transform-origin: left center;
   animation: fs-fill 700ms var(--fs-ease-out) both;
 }
@@ -339,7 +339,8 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 50% 32%, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02));
+  /* 未点亮的徽章：一层很淡的面，明暗模式共用一个令牌，浅底上自然变成浅灰 */
+  background: radial-gradient(circle at 50% 32%, var(--fs-line-strong), var(--fs-line));
   border: 1px solid var(--fs-line);
   color: var(--fs-text-4);
   transition: transform var(--fs-t) var(--fs-ease);
@@ -351,7 +352,7 @@
 
 .badge.is-got .badge__medal {
   color: var(--fs-accent);
-  background: radial-gradient(circle at 50% 26%, var(--fs-accent-soft) 0%, rgba(255, 255, 255, 0.02) 68%);
+  background: radial-gradient(circle at 50% 26%, var(--fs-accent-soft) 0%, var(--fs-line) 68%);
   border-color: var(--fs-accent-line);
   box-shadow: 0 0 18px -4px var(--fs-accent), inset 0 0 12px -4px var(--fs-accent);
 }
@@ -389,7 +390,7 @@
   overflow: hidden;
   display: grid;
   place-items: center;
-  box-shadow: -1px 1px 6px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: var(--fs-cover-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .cover::before {

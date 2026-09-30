@@ -3,6 +3,21 @@
  * 设计铁律：绝不惩罚用户。这里不存在任何"扣分 / 清零 / 失败"的规则。
  */
 
+/**
+ * 明暗模式：'auto' 跟着系统 | 'light' 日间（白天的书房）| 'dark' 夜间（夜晚的书房）
+ * 三种都保留萤火虫 —— 日间只是把房间换成白天，萤火虫照样亮着。
+ */
+export const COLOR_SCHEMES = [
+  { value: 'auto', label: '自动', desc: '跟着系统的深浅色走，日落日出自己换' },
+  { value: 'light', label: '日间', desc: '白天的书房：窗户透光，萤火虫还在' },
+  { value: 'dark', label: '夜间', desc: '最初的那间夜晚书房' },
+]
+
+export const COLOR_SCHEME_VALUES = COLOR_SCHEMES.map((s) => s.value)
+
+/** 默认明暗模式：留在夜间，老用户打开看到的还是原来的书房 */
+export const DEFAULT_SCHEME = 'dark'
+
 /** 打卡门槛：当日累计阅读满 5 分钟即点亮一只萤火虫（门槛刻意设低，先让用户赢得起） */
 export const LIT_THRESHOLD_SEC = 5 * 60
 
@@ -149,7 +164,7 @@ export const TOUR_STEPS = [
   },
   {
     id: 'settings',
-    target: '.study__top .fs-iconbtn',
+    target: '.study__settings',
     place: 'bottom',
     title: '数据只在你手机上',
     body: '这里没有账号、没有服务器，记录不会上传。右上角设置里可以开「每日提醒」、导出 JSON 备份，也可以随时重看这份引导。',

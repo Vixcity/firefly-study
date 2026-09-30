@@ -196,7 +196,6 @@ export function ReportPage() {
         </div>
       </section>
 
-      <div className="fs-safe-bottom" />
 
       <Sheet visible={!!cardUrl} onClose={() => setCardUrl(null)} title="分享卡片">
         {cardUrl ? (

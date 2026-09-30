@@ -477,3 +477,167 @@
   opacity: 0.3;
   box-shadow: 0 0 5px 1px var(--fs-f3);
 }
+
+/* ==========================================================================
+   日间模式：白天的书房
+   同一间屋子、同一套结构，只是把「夜里开灯」换成「白天透光」。
+   两条原则：
+   1. 窗外的天是亮的（蓝白渐变 + 太阳），屋里的墙反而偏中间调 ——
+      真实的白天室内本来就比室外暗，正好让萤火虫继续看得见；
+   2. 萤火虫一只都不少。它们的颜色（--fs-f1/f2/f3）是用户自己挑的，只额外给一层
+      压深的描边，浅底上才不至于糊掉 —— 「日间也可以有萤火虫」。
+   ========================================================================== */
+
+:root[data-scheme='light'] .scene {
+  background: #b3a58c;
+}
+
+/* ---- L1 墙面：暖白墙纸，左上角有一束天光 ---- */
+:root[data-scheme='light'] .scene__wall {
+  background:
+    radial-gradient(90% 58% at 74% 12%, rgba(255, 252, 240, 0.5) 0%, transparent 62%),
+    linear-gradient(180deg, #cec3ad 0%, #bcb098 46%, #96896f 100%);
+}
+
+/* ---- 主题特效：日间版各自压深一档 ---- */
+:root[data-scheme='light'] .scene__aurora {
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(120, 150, 235, 0.22) 26%,
+    rgba(150, 125, 220, 0.18) 48%,
+    rgba(90, 165, 225, 0.16) 70%,
+    transparent 100%
+  );
+}
+
+:root[data-scheme='light'] .scene__rain {
+  background-image: linear-gradient(
+    108deg,
+    transparent 0 46%,
+    rgba(120, 150, 180, 0.3) 46% 47%,
+    transparent 47% 100%
+  );
+}
+
+:root[data-scheme='light'] .scene__vines {
+  background-image:
+    radial-gradient(3px 26px at 12% 0%, rgba(80, 150, 110, 0.32) 0%, transparent 70%),
+    radial-gradient(3px 34px at 34% 0%, rgba(80, 150, 110, 0.26) 0%, transparent 70%),
+    radial-gradient(3px 20px at 58% 0%, rgba(80, 150, 110, 0.3) 0%, transparent 70%),
+    radial-gradient(3px 30px at 82% 0%, rgba(80, 150, 110, 0.24) 0%, transparent 70%);
+}
+
+/* ---- L2 房间亮度：读得越多，透进来的阳光越足 ---- */
+:root[data-scheme='light'] .scene__glow {
+  background:
+    radial-gradient(62% 46% at 76% 34%, rgba(255, 246, 214, 0.6) 0%, transparent 66%),
+    radial-gradient(120% 74% at 42% 96%, rgba(255, 232, 186, 0.42) 0%, transparent 68%);
+}
+
+:root[data-scheme='light'] .scene__floorline {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(140, 108, 60, 0.28) 22%,
+    rgba(140, 108, 60, 0.42) 52%,
+    transparent 100%
+  );
+}
+
+/* ---- L3 书架：白天的木头偏浅、偏灰 ---- */
+:root[data-scheme='light'] .shelf__board {
+  background: linear-gradient(180deg, #b28e68 0%, #8e7053 60%, #6b543d 100%);
+  box-shadow: 0 2px 6px rgba(90, 70, 45, 0.35), inset 0 1px 0 rgba(255, 240, 214, 0.4);
+}
+
+:root[data-scheme='light'] .spine__text {
+  color: rgba(255, 252, 244, 0.82);
+  text-shadow: 0 1px 2px rgba(60, 44, 24, 0.45);
+}
+
+/* ---- L4 窗户：蓝天 + 太阳，光直接洒进屋里 ---- */
+:root[data-scheme='light'] .window__sky {
+  background: linear-gradient(180deg, #8fc0e8 0%, #bcd9ef 52%, #e8f2f8 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 0 26px rgba(255, 250, 230, 0.5);
+}
+
+/* 夜里的月亮，白天就是太阳 */
+:root[data-scheme='light'] .window__moon {
+  background: #fff5cd;
+  box-shadow: 0 0 26px 10px rgba(255, 226, 150, 0.9);
+}
+
+:root[data-scheme='light'] .window__mullion {
+  background:
+    linear-gradient(180deg, transparent 48.6%, rgba(96, 78, 52, 0.28) 49.4% 50.6%, transparent 51.4%),
+    linear-gradient(90deg, transparent 48.6%, rgba(96, 78, 52, 0.28) 49.4% 50.6%, transparent 51.4%);
+  box-shadow: inset 0 0 0 1px rgba(96, 78, 52, 0.3);
+}
+
+:root[data-scheme='light'] .window__beam {
+  background: linear-gradient(
+    104deg,
+    rgba(255, 246, 214, 0.55) 0%,
+    rgba(255, 246, 214, 0.24) 34%,
+    transparent 62%
+  );
+}
+
+:root[data-scheme='light'] .window__sill {
+  border-bottom-color: #6f5740;
+  box-shadow: 0 4px 10px rgba(80, 62, 40, 0.35), inset 0 -1px 0 rgba(255, 240, 214, 0.36);
+}
+
+:root[data-scheme='light'] .window__tree {
+  filter: drop-shadow(0 6px 12px rgba(80, 62, 40, 0.3)) saturate(1) brightness(1.02);
+}
+
+/* ---- L5 萤火虫：一只都不少，只是补一圈压深的边 ---- */
+:root[data-scheme='light'] .ff__core {
+  /* 兜底：不支持 color-mix 的浏览器（Chrome < 111）用暖褐近似 */
+  box-shadow:
+    0 0 0 1px rgba(120, 86, 20, 0.4),
+    0 0 10px 3px rgba(180, 124, 24, 0.5);
+}
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  /* 描边跟着萤火虫配色走：把用户挑的颜色和深暖褐混一档，色相留住、亮度压下来 */
+  :root[data-scheme='light'] .ff__core {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--fs-f3) 55%, #6b4a12),
+      0 0 10px 3px color-mix(in srgb, var(--fs-f3) 60%, transparent);
+  }
+}
+
+:root[data-scheme='light'] .ff--today .ff__core {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--fs-f1) 60%, #6b4a12),
+    0 0 8px 2px var(--fs-f1),
+    0 0 20px 7px color-mix(in srgb, var(--fs-f3) 60%, transparent);
+}
+
+:root[data-scheme='light'] .ff--still .ff__core {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--fs-f3) 55%, #6b4a12);
+}
+
+/* 还没点亮的位置：夜里是发光的虚线圈，白天是一圈看得见的浅色虚线 */
+:root[data-scheme='light'] .ff__slot {
+  background: rgba(255, 252, 244, 0.34);
+}
+
+/* 尘埃在浅底上看不见，换成暖褐的小点 */
+:root[data-scheme='light'] .scene__dust span {
+  background: #fff6e2;
+  opacity: 0.5;
+  box-shadow: 0 0 5px 1px rgba(150, 110, 40, 0.5);
+}
+
+/* ---- L6 收边：白天不该压那么黑，只留一点点边角阴影 ---- */
+:root[data-scheme='light'] .scene__vignette {
+  background:
+    radial-gradient(120% 96% at 50% 44%, transparent 46%, rgba(84, 66, 40, 0.28) 100%),
+    linear-gradient(180deg, rgba(84, 66, 40, 0.16) 0%, transparent 18%);
+}

@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0B1020" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -20,8 +20,33 @@
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <title>萤火书房</title>
+    <script>
+      /*
+        首屏兜底之一：在 React 起来之前先把明暗模式落到 <html> 上。
+        否则选了「日间」的用户每次打开都会先闪一下夜色 —— 这个闪现在打包后最明显。
+        只读 store 里那一个字段，读不到就按夜间的兜底值走。
+      */
+      ;(function () {
+        var scheme = 'dark'
+        try {
+          var raw = localStorage.getItem('firefly-study:v1')
+          var saved = raw ? (JSON.parse(raw).settings || {}).scheme : null
+          if (saved === 'light' || saved === 'dark') {
+            scheme = saved
+          } else if (saved === 'auto') {
+            scheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          }
+        } catch (e) {
+          /* 隐私模式下 localStorage 会抛错，忽略即可 */
+        }
+        var el = document.documentElement
+        el.setAttribute('data-scheme', scheme)
+        el.setAttribute('data-prefers-color-scheme', scheme)
+      })()
+    </script>
     <style>
-      /* 首屏兜底：在 JS 加载前就把底色铺成夜色，避免白屏闪一下 */
+      /* 首屏兜底之二：在 JS 加载前就把底色铺好，避免白屏闪一下。
+         夜里铺夜色，白天铺暖白 —— 两套值要和 tokens.css 里的 --fs-bg-* 对齐。 */
       html,
       body {
         margin: 0;
@@ -40,6 +65,14 @@
         z-index: 9;
         transition: opacity 0.45s ease;
       }
+      html[data-scheme='light'],
+      html[data-scheme='light'] body {
+        background-color: #f4eee2;
+        color: #33291d;
+      }
+      html[data-scheme='light'] #boot {
+        background: radial-gradient(120% 80% at 50% 30%, #fdfaf4 0%, #f4eee2 62%, #e7ded0 100%);
+      }
       #boot.out {
         opacity: 0;
         pointer-events: none;
@@ -57,6 +90,9 @@
         letter-spacing: 0.32em;
         color: rgba(244, 236, 216, 0.5);
         font-family: system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      }
+      html[data-scheme='light'] .boot-text {
+        color: rgba(51, 41, 29, 0.5);
       }
       @keyframes boot-breathe {
         0%,

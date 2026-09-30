@@ -10,7 +10,7 @@
   flex-direction: column;
   background:
     radial-gradient(120% 62% at 50% 12%, var(--fs-glow) 0%, transparent 60%),
-    linear-gradient(180deg, #0c1220 0%, #070b14 56%, #04060c 100%);
+    linear-gradient(180deg, var(--fs-bg-top) 0%, var(--fs-bg-bottom) 56%, var(--fs-bg-deep) 100%);
   animation: fs-page-in var(--fs-t) var(--fs-ease-out);
 }
 

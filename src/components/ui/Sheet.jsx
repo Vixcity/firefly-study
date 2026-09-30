@@ -13,7 +13,8 @@ export function Sheet({ visible, onClose, title, children, footer, height = 'aut
       bodyStyle={{
         borderTopLeftRadius: 'var(--fs-r-lg)',
         borderTopRightRadius: 'var(--fs-r-lg)',
-        background: 'linear-gradient(180deg, #121a2c 0%, #0a0f1c 100%)',
+        /* 弹层底色走令牌：明暗模式各一套，别在这里写死夜色 */
+        background: 'var(--fs-popup)',
         border: '1px solid var(--fs-line)',
         maxHeight: '88dvh',
         overflow: 'auto',
@@ -39,7 +40,7 @@ export function CenterCard({ visible, onClose, children, title }) {
       position="center"
       bodyStyle={{
         borderRadius: 'var(--fs-r-lg)',
-        background: 'linear-gradient(180deg, #131b2e 0%, #0a0f1c 100%)',
+        background: 'var(--fs-popup)',
         border: '1px solid var(--fs-line)',
         width: '84vw',
         maxWidth: '380px',

@@ -614,6 +614,42 @@ async function main() {
     assert('讲了数据只在本机', text.includes('数据只在这台设备上'))
     await cdp.shot('12-settings')
 
+    // 明暗模式：设置里应该是「自动 / 日间 / 夜间」三选一，且点一下真的换
+    const schemeLabels = await cdp.eval(
+      `[...document.querySelectorAll('.settings__scheme .seg__item')].map((b) => b.innerText.trim()).join('/')`
+    )
+    assert(
+      '设置里有明暗模式三选一（自动/日间/夜间）',
+      schemeLabels === '自动/日间/夜间',
+      schemeLabels
+    )
+    const pickScheme = (label) =>
+      cdp.eval(`(() => {
+        const b = [...document.querySelectorAll('.settings__scheme .seg__item')]
+          .find((x) => (x.innerText || '').trim() === ${JSON.stringify(label)})
+        if (!b) return false
+        b.click()
+        return true
+      })()`)
+    assert('切到日间', await pickScheme('日间'))
+    await sleep(600)
+    const lightOn = await cdp.eval(`(() => {
+      const el = document.documentElement
+      const bg = getComputedStyle(document.querySelector('#root')).backgroundImage
+      return el.dataset.scheme === 'light' && getComputedStyle(el).colorScheme === 'light' && bg.includes('248, 243, 233')
+    })()`)
+    assert('日间生效：<html> 是 light，底色也换了', lightOn)
+    assert('切回夜间', await pickScheme('夜间'))
+    await sleep(600)
+    assert(
+      '夜间生效：<html> 是 dark 且选择被记下来',
+      await cdp.eval(`(() => {
+        const el = document.documentElement
+        return el.dataset.scheme === 'dark' && getComputedStyle(el).colorScheme === 'dark' &&
+          JSON.parse(localStorage.getItem('firefly-study:v1')).settings.scheme === 'dark'
+      })()`)
+    )
+
     // 导出应该真的触发一次下载（这里只验证按钮在 & 备份内容可解析）
     const exportOk = await cdp.eval(`(() => {
       const s = localStorage.getItem('firefly-study:v1')

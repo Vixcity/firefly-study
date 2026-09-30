@@ -77,7 +77,7 @@ export function BadgesPage() {
       </section>
 
       {/* ---- 概览 ---- */}
-      <div className="fs-grid2" style={{ marginTop: 'var(--fs-s4)' }}>
+      <div className="fs-grid2">
         <div className="stat">
           <div className="stat__label">
             <Icon name="firefly" size={11} />
@@ -165,7 +165,6 @@ export function BadgesPage() {
         )}
       </section>
 
-      <div className="fs-safe-bottom" />
 
       <Sheet visible={!!detail} onClose={() => setDetail(null)}>
         {detail ? <BadgeDetail badge={detail} stats={stats} unlockedAt={state.badges.unlocked[detail.id]} /> : null}
