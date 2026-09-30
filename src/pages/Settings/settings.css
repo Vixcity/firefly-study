@@ -1,0 +1,74 @@
+/* ==========================================================================
+   设置
+   ========================================================================== */
+
+.settings__block {
+  padding: var(--fs-s3) 0 var(--fs-s4);
+  border-bottom: 1px solid var(--fs-line);
+}
+
+.settings__block:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings__time {
+  flex: 1;
+  background: var(--fs-sunken);
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-r-sm);
+  padding: 8px 12px;
+  color: var(--fs-text);
+  font-size: var(--fs-fz-md);
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.settings__copyPreview {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s2);
+  margin: var(--fs-s3) 0;
+  padding: var(--fs-s3);
+  border-radius: var(--fs-r-sm);
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+  color: var(--fs-accent);
+  font-size: var(--fs-fz-sm);
+}
+
+.settings__ops {
+  display: flex;
+  gap: var(--fs-s3);
+  margin-top: var(--fs-s3);
+}
+
+.settings__ops > * {
+  flex: 1;
+}
+
+.settings__summary {
+  display: flex;
+  gap: var(--fs-s4);
+  flex-wrap: wrap;
+  margin-top: var(--fs-s3);
+}
+
+.settings__warn {
+  margin: var(--fs-s3) 0 0;
+  padding: var(--fs-s3);
+  border-radius: var(--fs-r-sm);
+  background: rgba(255, 138, 122, 0.1);
+  border: 1px solid rgba(255, 138, 122, 0.28);
+  color: #ff9d8d;
+  line-height: 1.7;
+}
+
+.settings__reset {
+  margin-top: var(--fs-s4);
+}
+
+.settings__about {
+  margin: var(--fs-s3) 0 0;
+  line-height: 1.9;
+}

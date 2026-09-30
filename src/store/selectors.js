@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { LEVELS, REPORT_COPY } from './constants'
-import { diffDays, monthKeys, recentKeys, weekKeys, monthKey } from '../lib/date'
+import { monthKeys, recentKeys, weekKeys, monthKey, rangeKeys } from '../lib/date'
 import { elapsedSec } from './rules/timer'
 import { badgeWall } from './rules/badges'
 import { streakView } from './rules/streak'
@@ -107,15 +107,8 @@ export function deriveStats(state) {
 
 /** 某个日期区间的统计（报告页用） */
 export function rangeStats(state, startKey, endKey) {
-  const keys = []
-  let cur = startKey
-  let guard = 0
-  while (diffDays(cur, endKey) >= 0 && guard < 4000) {
-    keys.push(cur)
-    if (cur === endKey) break
-    cur = dayjs(cur).add(1, 'day').format('YYYY-MM-DD')
-    guard += 1
-  }
+  // 闭区间：从 startKey 一路到 endKey，两头都算
+  const keys = rangeKeys(startKey, endKey)
   const keySet = new Set(keys)
   const sessions = (state.sessions || []).filter((s) => keySet.has(s.date))
   const days = keys.map((k) => state.days[k]).filter(Boolean)
@@ -168,13 +161,16 @@ export function rangeStats(state, startKey, endKey) {
 
 /** 报告页的区间定义 */
 export function reportRanges(today) {
-  const weekStart = dayjs(today).startOf('week').add(1, 'day')
+  // 自然周固定按"周一开始"算，不依赖 dayjs 的 locale 设置
+  const d = dayjs(today)
+  const mondayOffset = (d.day() + 6) % 7 // 周一 = 0
+  const weekStart = d.subtract(mondayOffset, 'day')
   const wkStartKey = weekStart.format('YYYY-MM-DD')
   const prevWeekStart = weekStart.subtract(7, 'day').format('YYYY-MM-DD')
   const prevWeekEnd = weekStart.subtract(1, 'day').format('YYYY-MM-DD')
-  const monthStart = dayjs(today).startOf('month').format('YYYY-MM-DD')
-  const prevMonthStart = dayjs(today).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
-  const prevMonthEnd = dayjs(today).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
+  const monthStart = d.startOf('month').format('YYYY-MM-DD')
+  const prevMonthStart = d.subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
+  const prevMonthEnd = d.subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
 
   return {
     week: { label: '本周', start: wkStartKey, end: today, full: false },
@@ -210,7 +206,8 @@ export function buildDerived(state) {
 
 /** 报告页文案：温暖、不施压、不给"目标" */
 export function reportCopy(range) {
-  const min = Math.round(range.totalSec / 60)
+  // 和 formatDuration 口径一致（不足 1 分钟不进位），避免同一页出现 21 / 22 两个数
+  const min = Math.floor(range.totalSec / 60)
   if (range.totalSec <= 0) return REPORT_COPY.empty
   if (min < 60) return REPORT_COPY.tiny(min, range.litDays)
   if (min < 600) return REPORT_COPY.small(min, range.litDays)

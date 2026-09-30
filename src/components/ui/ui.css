@@ -1,0 +1,414 @@
+/* ==========================================================================
+   通用 UI 组件样式：环形进度、7 天圆点、柱状图、分段选择、统计卡
+   ========================================================================== */
+
+/* ---------------- 环形进度 ---------------- */
+
+.ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.ring__inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+/* ---------------- 最近 7 天圆点 ---------------- */
+
+.dots {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--fs-s2);
+}
+
+.dots__dot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.dots__core {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  transition: background var(--fs-t) var(--fs-ease), box-shadow var(--fs-t) var(--fs-ease);
+}
+
+.dots__label {
+  font-size: 10px;
+  color: var(--fs-text-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.dots__dot.is-lit .dots__core {
+  background: radial-gradient(circle at 40% 36%, var(--fs-f1), var(--fs-f2) 62%, var(--fs-f3));
+  box-shadow: 0 0 9px 2px var(--fs-f2);
+}
+
+.dots__dot.is-lit .dots__label {
+  color: var(--fs-text-2);
+}
+
+.dots__dot.is-rest .dots__core {
+  background: transparent;
+  border: 1px dashed var(--fs-accent-line);
+}
+
+.dots__dot.is-progress .dots__core {
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+}
+
+.dots__dot.is-quiet .dots__core {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dots__dot.is-today .dots__core {
+  box-shadow: 0 0 0 2px var(--fs-sunken), 0 0 0 3px var(--fs-accent-line);
+}
+
+.dots__dot.is-today .dots__label {
+  color: var(--fs-accent);
+}
+
+.dots__dot.is-today.is-lit .dots__core {
+  box-shadow: 0 0 10px 2px var(--fs-f2), 0 0 0 3px var(--fs-accent-line);
+}
+
+.dots--compact .dots__label {
+  font-size: 9px;
+}
+
+.dots--compact .dots__core {
+  width: 11px;
+  height: 11px;
+}
+
+/* ---------------- 柱状图 ---------------- */
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: calc(var(--bars-h, 96px) + 20px);
+}
+
+.bars__col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+
+.bars__track {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bars__bar {
+  width: 70%;
+  max-width: 16px;
+  min-height: 3px;
+  border-radius: var(--fs-r-full);
+  background: rgba(255, 255, 255, 0.13);
+  transition: height var(--fs-t) var(--fs-ease-out);
+}
+
+.bars__bar.is-lit {
+  background: linear-gradient(180deg, var(--fs-f1) 0%, var(--fs-f2) 62%, var(--fs-f3) 100%);
+  box-shadow: 0 0 10px -1px var(--fs-f2);
+}
+
+.bars__bar.is-rest {
+  background: repeating-linear-gradient(
+    180deg,
+    var(--fs-accent-soft) 0 3px,
+    transparent 3px 6px
+  );
+}
+
+.bars__label {
+  font-size: 9px;
+  color: var(--fs-text-4);
+  font-variant-numeric: tabular-nums;
+  height: 12px;
+}
+
+/* ---------------- 分段选择 ---------------- */
+
+.seg {
+  position: relative;
+  display: flex;
+  padding: 4px;
+  border-radius: var(--fs-r-full);
+  background: var(--fs-sunken);
+  border: 1px solid var(--fs-line);
+}
+
+.seg__thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  bottom: 4px;
+  border-radius: var(--fs-r-full);
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+  transition: transform var(--fs-t) var(--fs-ease-out);
+}
+
+.seg__item {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  height: 30px;
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-3);
+  border-radius: var(--fs-r-full);
+  transition: color var(--fs-t-fast) var(--fs-ease);
+}
+
+.seg__item.is-active {
+  color: var(--fs-accent);
+  font-weight: 500;
+}
+
+.seg--sm .seg__item {
+  height: 26px;
+  font-size: var(--fs-fz-xs);
+}
+
+/* ---------------- 统计卡 ---------------- */
+
+.stat {
+  padding: var(--fs-s3) var(--fs-s3) var(--fs-s4);
+  border-radius: var(--fs-r-md);
+  background: var(--fs-card);
+  border: 1px solid var(--fs-line);
+  min-width: 0;
+}
+
+.stat__label {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.stat__value {
+  font-size: var(--fs-fz-xl);
+  line-height: 1.15;
+  font-weight: 600;
+}
+
+.stat__unit {
+  font-size: var(--fs-fz-sm);
+  font-weight: 400;
+  color: var(--fs-text-3);
+  margin-left: 3px;
+}
+
+.stat__sub {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-4);
+  margin-top: 2px;
+}
+
+/* ---------------- 进度条 ---------------- */
+
+.pbar {
+  height: 6px;
+  border-radius: var(--fs-r-full);
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.pbar__fill {
+  height: 100%;
+  border-radius: var(--fs-r-full);
+  background: linear-gradient(90deg, var(--fs-f3) 0%, var(--fs-f1) 100%);
+  box-shadow: 0 0 10px -1px var(--fs-f2);
+  transform-origin: left center;
+  animation: fs-fill 700ms var(--fs-ease-out) both;
+}
+
+.pbar--thin {
+  height: 4px;
+}
+
+/* ---------------- 弹层通用 ---------------- */
+
+.sheet__footer {
+  display: flex;
+  gap: var(--fs-s3);
+  margin-top: var(--fs-s5);
+}
+
+.sheet__footer > * {
+  flex: 1;
+}
+
+/* ---------------- 列表行 ---------------- */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s3);
+  padding: var(--fs-s3) 0;
+  border-bottom: 1px solid var(--fs-line);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row__glyph {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: var(--fs-r-sm);
+  display: grid;
+  place-items: center;
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent);
+}
+
+.row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.row__title {
+  font-size: var(--fs-fz-base);
+  color: var(--fs-text);
+}
+
+.row__sub {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+}
+
+.row__value {
+  font-variant-numeric: tabular-nums;
+  color: var(--fs-text-2);
+  font-size: var(--fs-fz-sm);
+  flex: none;
+}
+
+.row--tap {
+  cursor: pointer;
+  transition: background var(--fs-t-fast) var(--fs-ease);
+  border-radius: var(--fs-r-sm);
+}
+
+.row--tap:active {
+  background: var(--fs-card);
+}
+
+/* ---------------- 徽章 ---------------- */
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.badge__medal {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 32%, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--fs-line);
+  color: var(--fs-text-4);
+  transition: transform var(--fs-t) var(--fs-ease);
+}
+
+.badge:active .badge__medal {
+  transform: scale(0.95);
+}
+
+.badge.is-got .badge__medal {
+  color: var(--fs-accent);
+  background: radial-gradient(circle at 50% 26%, var(--fs-accent-soft) 0%, rgba(255, 255, 255, 0.02) 68%);
+  border-color: var(--fs-accent-line);
+  box-shadow: 0 0 18px -4px var(--fs-accent), inset 0 0 12px -4px var(--fs-accent);
+}
+
+.badge__name {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+  line-height: 1.3;
+}
+
+.badge.is-got .badge__name {
+  color: var(--fs-text-2);
+}
+
+.badge__ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+}
+
+.badge.is-got .badge__ring {
+  border-color: var(--fs-accent-line);
+  animation: fs-glow-pulse 5s ease-in-out infinite;
+}
+
+/* ---------------- 读书封面 ---------------- */
+
+.cover {
+  width: 44px;
+  height: 60px;
+  flex: none;
+  border-radius: 4px 7px 7px 4px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  box-shadow: -1px 1px 6px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.cover__title {
+  writing-mode: vertical-rl;
+  font-size: 10px;
+  line-height: 1.1;
+  max-height: 84%;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.86);
+  letter-spacing: 0.06em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}

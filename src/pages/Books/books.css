@@ -1,0 +1,76 @@
+/* ==========================================================================
+   书库
+   ========================================================================== */
+
+.books {
+  padding-top: 0;
+}
+
+.books__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-s3);
+}
+
+.books__item {
+  padding: var(--fs-s4);
+}
+
+.books__title {
+  font-size: var(--fs-fz-md);
+  font-weight: 600;
+  margin: 0;
+  min-width: 0;
+}
+
+.books__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 8px;
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+}
+
+.books__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.books__ops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fs-s2);
+  margin-top: var(--fs-s4);
+  padding-top: var(--fs-s3);
+  border-top: 1px solid var(--fs-line);
+}
+
+.books__notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-s3);
+}
+
+.books__note {
+  display: flex;
+  gap: var(--fs-s3);
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-2);
+  line-height: 1.75;
+}
+
+.books__note p {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.books__note-date {
+  flex: none;
+  color: var(--fs-text-4);
+  font-size: var(--fs-fz-xs);
+  padding-top: 3px;
+  font-variant-numeric: tabular-nums;
+}

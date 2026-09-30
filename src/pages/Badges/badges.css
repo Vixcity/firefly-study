@@ -1,0 +1,159 @@
+/* ==========================================================================
+   荣光（等级 + 徽章墙）
+   ========================================================================== */
+
+.badges {
+  padding-top: 0;
+}
+
+.badges__level {
+  margin-top: var(--fs-s3);
+}
+
+.badges__level-glyph {
+  color: var(--fs-accent);
+  display: grid;
+  place-items: center;
+}
+
+.badges__level-name {
+  font-size: var(--fs-fz-xl);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--fs-accent);
+  line-height: 1.3;
+  text-shadow: 0 0 26px var(--fs-accent-soft);
+}
+
+.badges__levels {
+  display: flex;
+  gap: 6px;
+  margin-top: var(--fs-s4);
+  padding-top: var(--fs-s3);
+  border-top: 1px solid var(--fs-line);
+}
+
+.badges__lvl {
+  flex: 1;
+  text-align: center;
+  font-size: var(--fs-fz-xs);
+  padding: 5px 2px;
+  border-radius: var(--fs-r-sm);
+  color: var(--fs-text-4);
+  background: var(--fs-sunken);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badges__lvl.is-on {
+  color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent-line);
+}
+
+/* ---------------- 分类 ---------------- */
+
+.badges__groups {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin: var(--fs-s5) 0 var(--fs-s2);
+  padding-bottom: 4px;
+}
+
+.badges__groups::-webkit-scrollbar {
+  display: none;
+}
+
+.badges__group {
+  flex: none;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: var(--fs-r-full);
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+  background: var(--fs-card);
+  border: 1px solid var(--fs-line);
+}
+
+.badges__group.is-on {
+  color: var(--fs-accent);
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent-line);
+}
+
+/* ---------------- 徽章 ---------------- */
+
+.badges .fs-grid3 {
+  gap: var(--fs-s4) var(--fs-s3);
+}
+
+.badge {
+  padding: 0;
+  overflow: visible;
+}
+
+.badge__medal {
+  overflow: hidden;
+}
+
+/* 未解锁徽章底部的一小段进度，暗示"快到了" */
+.badge__progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--fs-f3), var(--fs-f1));
+  border-radius: 0 2px 2px 0;
+  opacity: 0.55;
+}
+
+.badge.is-got .badge__progress {
+  display: none;
+}
+
+/* 未解锁徽章的解锁条件（压得很淡：是提示，不是压力） */
+.badge__cond {
+  font-size: 9px;
+  line-height: 1.35;
+  color: var(--fs-text-4);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: -3px;
+}
+
+/* ---------------- 徽章详情 ---------------- */
+
+.badgedetail {
+  padding-top: var(--fs-s2);
+}
+
+.badgedetail__medal {
+  margin: 0 auto;
+  width: 108px;
+}
+
+.badgedetail__medal .badge__medal {
+  width: 108px;
+}
+
+.badgedetail__got {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--fs-s5);
+  padding: 7px 14px;
+  border-radius: var(--fs-r-full);
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+  color: var(--fs-accent);
+  font-size: var(--fs-fz-sm);
+}
+
+.badgedetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

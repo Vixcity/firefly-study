@@ -1,0 +1,119 @@
+/* ==========================================================================
+   报告
+   ========================================================================== */
+
+.report {
+  padding-top: 0;
+}
+
+.report__hero {
+  margin-top: var(--fs-s4);
+}
+
+.report__hero-label {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+}
+
+.report__hero-value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 2px 0 2px;
+}
+
+.report__hero-value > span:first-child {
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.report__hero-unit {
+  font-size: var(--fs-fz-base);
+  color: var(--fs-text-3);
+}
+
+.report__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--fs-s2);
+  margin-top: var(--fs-s4);
+  padding-top: var(--fs-s4);
+  border-top: 1px solid var(--fs-line);
+}
+
+.report__metric-label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--fs-text-3);
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+
+.report__metric-value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: var(--fs-fz-lg);
+  font-weight: 600;
+}
+
+.report__metric-unit {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--fs-text-4);
+}
+
+.report__copy {
+  margin: var(--fs-s4) 0 0;
+  padding: var(--fs-s3) var(--fs-s4);
+  border-radius: var(--fs-r-sm);
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+  color: var(--fs-text-2);
+  font-size: var(--fs-fz-sm);
+  line-height: 1.9;
+}
+
+.report__rest {
+  margin: var(--fs-s3) 0 0;
+  line-height: 1.8;
+}
+
+.report__chart,
+.report__books,
+.report__share {
+  margin-top: var(--fs-s5);
+}
+
+.report__books .row:last-child {
+  border-bottom: none;
+}
+
+.report__total {
+  margin-top: var(--fs-s5);
+}
+
+.report__total-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--fs-s3) var(--fs-s4);
+}
+
+.report__total-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--fs-s2);
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--fs-line);
+}
+
+.report__cardimg {
+  width: 100%;
+  border-radius: var(--fs-r-md);
+  border: 1px solid var(--fs-line);
+  display: block;
+}

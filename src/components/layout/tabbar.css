@@ -1,0 +1,69 @@
+.tabbar {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 520px;
+  z-index: 40;
+  display: flex;
+  padding: 6px 6px calc(var(--fs-safe-bottom) + 6px);
+  background: linear-gradient(180deg, rgba(7, 10, 18, 0.72) 0%, rgba(6, 9, 16, 0.96) 42%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid var(--fs-line);
+}
+
+.tabbar__item {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--fs-tabbar-h) - 12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-radius: var(--fs-r-sm);
+  color: var(--fs-text-3);
+  transition: color var(--fs-t-fast) var(--fs-ease), transform var(--fs-t-fast) var(--fs-ease);
+}
+
+.tabbar__item:active {
+  transform: scale(0.94);
+}
+
+.tabbar__item.is-active {
+  color: var(--fs-accent);
+}
+
+.tabbar__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.tabbar__label {
+  font-size: var(--fs-fz-xs);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.tabbar__item.is-active .tabbar__icon::after {
+  content: '';
+  position: absolute;
+  inset: -7px -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--fs-accent-soft) 0%, transparent 72%);
+  z-index: -1;
+}
+
+.tabbar__dot {
+  position: absolute;
+  top: -1px;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fs-accent);
+  box-shadow: 0 0 6px 1px var(--fs-accent);
+}

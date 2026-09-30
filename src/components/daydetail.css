@@ -1,0 +1,84 @@
+/* ==========================================================================
+   一天的阅读详情
+   ========================================================================== */
+
+.daydetail__head {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s2);
+  flex-wrap: wrap;
+  padding-bottom: var(--fs-s3);
+  border-bottom: 1px solid var(--fs-line);
+}
+
+.daydetail__rest {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s2);
+  margin-top: var(--fs-s3);
+  padding: var(--fs-s3);
+  border-radius: var(--fs-r-sm);
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+  color: var(--fs-accent);
+  font-size: var(--fs-fz-sm);
+}
+
+.daydetail__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-s2);
+  max-height: 58dvh;
+  overflow-y: auto;
+  margin-top: var(--fs-s2);
+}
+
+.daydetail__item {
+  display: flex;
+  gap: var(--fs-s3);
+  padding: var(--fs-s4) 0;
+  border-bottom: 1px solid var(--fs-line);
+}
+
+.daydetail__item:last-child {
+  border-bottom: none;
+}
+
+.daydetail__time {
+  flex: none;
+  width: 44px;
+  padding-top: 2px;
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-3);
+}
+
+.daydetail__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.daydetail__note {
+  margin: var(--fs-s3) 0 0;
+  padding: var(--fs-s3);
+  border-radius: var(--fs-r-sm);
+  background: var(--fs-sunken);
+  border-left: 2px solid var(--fs-accent-line);
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-2);
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.daydetail__ops {
+  display: flex;
+  gap: var(--fs-s2);
+  margin-top: var(--fs-s3);
+}
+
+.fs-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

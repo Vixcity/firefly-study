@@ -1,0 +1,170 @@
+/* ==========================================================================
+   点亮时刻的仪式感
+   ========================================================================== */
+
+.reward {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.reward__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(74% 46% at 50% 40%, var(--fs-glow) 0%, transparent 66%),
+    linear-gradient(180deg, rgba(6, 10, 18, 0.94) 0%, rgba(4, 6, 12, 0.98) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 从中心扩散的光环 */
+.reward__ripple {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  width: 168px;
+  height: 168px;
+  margin: -84px 0 0 -84px;
+  border-radius: 50%;
+  border: 2px solid var(--fs-accent);
+  box-shadow: 0 0 40px -6px var(--fs-accent);
+  animation: fs-ripple 1100ms var(--fs-ease-out) both;
+  pointer-events: none;
+}
+
+/* 飞向书架的萤火虫 */
+.reward__flyer {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, var(--fs-f1), var(--fs-f2) 58%, var(--fs-f3));
+  box-shadow: 0 0 16px 6px var(--fs-f2), 0 0 40px 14px var(--fs-f3);
+  animation: reward-fly 2000ms var(--fs-ease-out) 320ms both;
+  pointer-events: none;
+}
+
+@keyframes reward-fly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(0, -14px) scale(1.15);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-58px, 92px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-96px, 168px) scale(0.35);
+  }
+}
+
+.reward__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--fs-f1);
+  box-shadow: 0 0 8px 2px var(--fs-f2);
+  pointer-events: none;
+}
+
+.reward__body {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: var(--fs-s6) var(--fs-s5) calc(var(--fs-safe-bottom) + var(--fs-s6));
+  text-align: center;
+}
+
+.reward__badge {
+  width: 92px;
+  height: 92px;
+  margin: 0 auto var(--fs-s4);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--fs-accent);
+  background: radial-gradient(circle at 50% 34%, var(--fs-accent-soft) 0%, transparent 68%);
+  box-shadow: 0 0 60px -8px var(--fs-accent);
+}
+
+.reward__title {
+  font-size: var(--fs-fz-xl);
+  font-weight: 600;
+  margin: 0 0 var(--fs-s2);
+  letter-spacing: 0.02em;
+}
+
+.reward__sub {
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-3);
+  margin: 0 0 var(--fs-s5);
+  line-height: 1.7;
+}
+
+.reward__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--fs-s2);
+  padding: var(--fs-s4) var(--fs-s2);
+  border-radius: var(--fs-r-md);
+  background: var(--fs-card);
+  border: 1px solid var(--fs-line);
+}
+
+.reward__stat-label {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+  margin-bottom: 2px;
+}
+
+.reward__stat-value {
+  font-size: var(--fs-fz-lg);
+  font-weight: 600;
+}
+
+.reward__detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: var(--fs-s3);
+}
+
+.reward__toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--fs-s3);
+  padding: 7px 14px;
+  border-radius: var(--fs-r-full);
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+  color: var(--fs-accent);
+  font-size: var(--fs-fz-sm);
+}
+
+.reward__badges {
+  margin-top: var(--fs-s4);
+}
+
+.reward__badges .fs-row {
+  justify-content: center;
+}
+
+.reward__actions {
+  margin-top: var(--fs-s5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-s3);
+}

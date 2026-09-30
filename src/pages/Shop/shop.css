@@ -1,0 +1,220 @@
+/* ==========================================================================
+   光点商店
+   ========================================================================== */
+
+.shop {
+  padding-top: 0;
+}
+
+.shop__balance {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--fs-r-full);
+  background: var(--fs-accent-soft);
+  border: 1px solid var(--fs-accent-line);
+  color: var(--fs-accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.shop__rules {
+  margin-top: var(--fs-s3);
+}
+
+.shop__rulelist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-2);
+}
+
+.shop__rulelist li {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s2);
+}
+
+/* ---------------- 商品网格 ---------------- */
+
+.shop__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--fs-s3);
+}
+
+.shop__item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--fs-s3);
+  border-radius: var(--fs-r-md);
+  background: var(--fs-card);
+  border: 1px solid var(--fs-line);
+}
+
+.shop__item.is-active {
+  border-color: var(--fs-accent-line);
+  box-shadow: 0 0 0 1px var(--fs-accent-soft) inset;
+}
+
+.shop__previewBtn {
+  display: block;
+  width: 100%;
+}
+
+.shop__preview {
+  position: relative;
+  height: 76px;
+  border-radius: var(--fs-r-sm);
+  background:
+    radial-gradient(70% 60% at 50% 40%, rgba(255, 255, 255, 0.05), transparent 70%),
+    rgba(0, 0, 0, 0.25);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.shop__preview--theme {
+  position: relative;
+}
+
+.shop__theme-glow {
+  position: absolute;
+  inset: 0;
+}
+
+.shop__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.shop__name {
+  margin-top: 10px;
+  font-size: var(--fs-fz-sm);
+  font-weight: 600;
+}
+
+.shop__desc {
+  line-height: 1.5;
+  min-height: 30px;
+}
+
+.shop__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.shop__price {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.shop__price.is-lack {
+  color: var(--fs-text-3);
+}
+
+/* ---------------- 试色台 ---------------- */
+
+.shop__previewSheet {
+  padding-top: var(--fs-s2);
+}
+
+.shop__stage {
+  position: relative;
+  height: 190px;
+  border-radius: var(--fs-r-md);
+  overflow: hidden;
+  background: linear-gradient(180deg, #0d1424 0%, #05070e 100%);
+  border: 1px solid var(--fs-line);
+}
+
+.shop__stage.is-theme_forest {
+  background: linear-gradient(180deg, #12261f 0%, #060e0b 100%);
+}
+.shop__stage.is-theme_starry {
+  background: linear-gradient(180deg, #141b3c 0%, #05060f 100%);
+}
+.shop__stage.is-theme_rain {
+  background: linear-gradient(180deg, #101c2b 0%, #050a11 100%);
+}
+
+.shop__stage-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 46% at 68% 34%, rgba(255, 214, 150, 0.34) 0%, transparent 66%);
+}
+
+.shop__stage-shelf {
+  position: absolute;
+  left: 8%;
+  bottom: 14%;
+  width: 46%;
+  height: 52%;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.shop__stage-book {
+  flex: 1;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #5a4636, #2c2118);
+  opacity: 0.8;
+}
+
+.shop__stage-tree {
+  position: absolute;
+  right: 16%;
+  bottom: 14%;
+  width: 16px;
+  height: 74px;
+  border-radius: 60% 60% 20% 20%;
+  background: radial-gradient(circle at 50% 30%, var(--fs-leaf), var(--fs-leaf-deep));
+  box-shadow: 0 0 22px -2px var(--fs-leaf);
+}
+
+.shop__stage-fly {
+  position: absolute;
+  inset: 0;
+}
+
+.shop__stage-fly i {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, var(--fs-f1), var(--fs-f2) 58%, var(--fs-f3));
+  box-shadow: 0 0 10px 3px var(--fs-f2), 0 0 26px 9px var(--fs-f3);
+  animation: fs-breathe 3.4s ease-in-out infinite;
+}
+
+.shop__stage-fly i:nth-child(1) {
+  top: 26%;
+  left: 24%;
+}
+
+.shop__stage-fly i:nth-child(2) {
+  top: 52%;
+  left: 58%;
+  animation-delay: 0.7s;
+}
+
+.shop__stage-fly i:nth-child(3) {
+  top: 18%;
+  left: 78%;
+  animation-delay: 1.4s;
+}

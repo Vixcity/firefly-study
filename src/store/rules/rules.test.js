@@ -9,7 +9,7 @@ import { badgeProgress, badgeWall, evaluateBadges } from './badges'
 import { applySessionCompletion, discardReading } from './session'
 import { addBook, deleteSession, markBookFinished, updateSession } from './books'
 import { redeem, applyCosmetic } from './shop'
-import { deriveStats, levelOf } from '../selectors'
+import { deriveStats, levelOf, rangeStats, reportCopy, reportRanges, roomLight } from '../selectors'
 
 // ------------------------------------------------------------------ 工具
 
@@ -511,5 +511,48 @@ describe('派生统计', () => {
     // 9 小时 = 点亮 10 + 时长 108，但封顶 100
     expect(out.result.pointsGained).toBe(100)
     expect(out.result.breakdown.cappedAway).toBeGreaterThan(0)
+  })
+})
+
+// ------------------------------------------------------------------ 报表区间
+
+describe('报表区间', () => {
+  it('本周从周一开始，区间统计把两端都算进去', () => {
+    // 2026-09-30 是周三，本周应为 09-28（周一）~ 09-30
+    const ranges = reportRanges('2026-09-30')
+    expect(ranges.week.start).toBe('2026-09-28')
+    expect(ranges.week.end).toBe('2026-09-30')
+    expect(ranges.lastWeek.start).toBe('2026-09-21')
+    expect(ranges.lastWeek.end).toBe('2026-09-27')
+    expect(ranges.month.start).toBe('2026-09-01')
+
+    let state = createInitialState(T('2026-09-28', '09:00'))
+    state = readSeveralDays(state, ['2026-09-28', '2026-09-29', '2026-09-30'], 10).state
+    const week = rangeStats(state, ranges.week.start, ranges.week.end)
+    expect(week.sessionsCount).toBe(3)
+    expect(week.totalSec).toBe(30 * 60)
+    expect(week.litDays).toBe(3)
+    expect(week.dailySeries).toHaveLength(3)
+  })
+
+  it('区间内没有记录时统计为 0，且仍然给一句温柔的话', () => {
+    const state = createInitialState(T('2026-09-30', '09:00'))
+    const ranges = reportRanges('2026-09-30')
+    const week = rangeStats(state, ranges.week.start, ranges.week.end)
+    expect(week.totalSec).toBe(0)
+    expect(week.dailySeries).toHaveLength(3)
+    expect(reportCopy(week)).toBeTruthy()
+  })
+
+  it('报告文案的口径与界面的时长显示一致（不足一分钟不进位）', () => {
+    // 21 分 30 秒：界面显示 21 分钟，文案也必须是 21
+    const range = { totalSec: 21 * 60 + 30, litDays: 2 }
+    expect(reportCopy(range)).toContain('21 分钟')
+  })
+
+  it('书房亮度随累计时长变亮，且有上下限', () => {
+    expect(roomLight(0)).toBeCloseTo(0.18)
+    expect(roomLight(10 * 3600)).toBeGreaterThan(roomLight(3600))
+    expect(roomLight(999 * 3600)).toBeLessThanOrEqual(0.9)
   })
 })

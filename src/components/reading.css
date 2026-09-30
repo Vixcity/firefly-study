@@ -1,0 +1,184 @@
+/* ==========================================================================
+   全屏沉浸计时 + 结算
+   ========================================================================== */
+
+.reading {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(120% 62% at 50% 12%, var(--fs-glow) 0%, transparent 60%),
+    linear-gradient(180deg, #0c1220 0%, #070b14 56%, #04060c 100%);
+  animation: fs-page-in var(--fs-t) var(--fs-ease-out);
+}
+
+.reading__glow {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: 340px;
+  height: 340px;
+  margin: -170px 0 0 -170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--fs-accent-soft) 0%, transparent 68%);
+  opacity: 0.7;
+  pointer-events: none;
+  animation: fs-glow-pulse 6s ease-in-out infinite;
+}
+
+.reading__top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s3);
+  padding: calc(var(--fs-safe-top) + var(--fs-s4)) var(--fs-s4) var(--fs-s2);
+}
+
+.reading__bookchip {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s2);
+  height: 36px;
+  padding: 0 var(--fs-s3);
+  border-radius: var(--fs-r-full);
+  background: var(--fs-card);
+  border: 1px solid var(--fs-line);
+  color: var(--fs-text-2);
+  font-size: var(--fs-fz-sm);
+}
+
+.reading__bookchip--static {
+  justify-content: center;
+  color: var(--fs-text-3);
+}
+
+.reading__center {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fs-s5);
+}
+
+.reading__clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fs-s2);
+}
+
+.reading__time {
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.reading__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--fs-fz-sm);
+}
+
+.reading__hint {
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-3);
+  min-height: 22px;
+  letter-spacing: 0.02em;
+}
+
+.reading__bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: var(--fs-s3);
+  padding: var(--fs-s4) var(--fs-s4) calc(var(--fs-safe-bottom) + var(--fs-s5));
+}
+
+.reading__pause {
+  flex: 0 0 116px;
+}
+
+.reading__done {
+  flex: 1;
+}
+
+/* ---------------- 结算表单 ---------------- */
+
+.reading__form {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--fs-s4) calc(var(--fs-safe-bottom) + var(--fs-s6));
+  animation: fs-rise var(--fs-t) var(--fs-ease-out);
+}
+
+.reading__formtitle {
+  font-size: var(--fs-fz-lg);
+  font-weight: 600;
+  margin: var(--fs-s4) 0 2px;
+}
+
+.reading__formactions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-s3);
+  margin-top: var(--fs-s5);
+}
+
+/* ---------------- 选书 ---------------- */
+
+.shelfpick {
+  border-bottom: 1px solid var(--fs-line);
+  border-radius: 0;
+  margin-bottom: var(--fs-s2);
+}
+
+.shelfpick__empty {
+  width: 44px;
+  height: 60px;
+  flex: none;
+  border-radius: var(--fs-r-sm);
+  display: grid;
+  place-items: center;
+  background: var(--fs-card-2);
+  border: 1px dashed var(--fs-line-strong);
+  color: var(--fs-text-3);
+}
+
+.bookpick {
+  display: flex;
+  flex-direction: column;
+  max-height: 44dvh;
+  overflow-y: auto;
+}
+
+.bookpick__item {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s3);
+  padding: var(--fs-s3) var(--fs-s2);
+  border-radius: var(--fs-r-sm);
+  text-align: left;
+  border: 1px solid transparent;
+}
+
+.bookpick__item.is-on {
+  background: var(--fs-accent-soft);
+  border-color: var(--fs-accent-line);
+}
+
+.bookpick__item:active {
+  background: var(--fs-card);
+}

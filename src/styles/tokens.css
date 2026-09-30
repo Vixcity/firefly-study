@@ -1,0 +1,227 @@
+/* ==========================================================================
+   萤火书房 · 设计令牌
+   一套"夜晚书房"的配色：暗夜蓝作底，暖黄作光，橙红点缀。
+   主题 / 萤火虫配色 / 光合树形态都通过 <html> 上的 data-* 属性切换，纯 CSS 生效。
+   ========================================================================== */
+
+:root {
+  /* ---- 底色（由主题覆盖） ---- */
+  --fs-bg-top: #17203a;
+  --fs-bg-bottom: #070a15;
+  --fs-glow: rgba(255, 217, 138, 0.16);
+  --fs-accent: #ffd98a;
+  --fs-accent-soft: rgba(255, 217, 138, 0.14);
+  --fs-accent-line: rgba(255, 217, 138, 0.32);
+  --fs-accent-deep: #e0a94b;
+
+  /* ---- 萤火虫光色（由配色覆盖） ---- */
+  --fs-f1: #ffe9b0;
+  --fs-f2: #ffd98a;
+  --fs-f3: #f2b94b;
+
+  /* ---- 光合树（由形态覆盖） ---- */
+  --fs-leaf: #7fc9a3;
+  --fs-leaf-deep: #3f7f63;
+  --fs-bloom: #ffd98a;
+  --fs-trunk: #6b5844;
+
+  /* ---- 文字 ---- */
+  --fs-text: #f4ecd8;
+  --fs-text-2: rgba(244, 236, 216, 0.72);
+  --fs-text-3: rgba(244, 236, 216, 0.48);
+  --fs-text-4: rgba(244, 236, 216, 0.28);
+
+  /* ---- 面 ---- */
+  --fs-card: rgba(255, 255, 255, 0.045);
+  --fs-card-2: rgba(255, 255, 255, 0.075);
+  --fs-line: rgba(255, 255, 255, 0.075);
+  --fs-line-strong: rgba(255, 255, 255, 0.14);
+  --fs-sunken: rgba(0, 0, 0, 0.26);
+
+  /* ---- 圆角 ---- */
+  --fs-r-xs: 8px;
+  --fs-r-sm: 12px;
+  --fs-r-md: 18px;
+  --fs-r-lg: 24px;
+  --fs-r-xl: 32px;
+  --fs-r-full: 999px;
+
+  /* ---- 间距 ---- */
+  --fs-s1: 4px;
+  --fs-s2: 8px;
+  --fs-s3: 12px;
+  --fs-s4: 16px;
+  --fs-s5: 20px;
+  --fs-s6: 28px;
+  --fs-s7: 36px;
+  --fs-s8: 48px;
+
+  /* ---- 光效 ---- */
+  --fs-glow-sm: 0 0 12px rgba(255, 217, 138, 0.35);
+  --fs-glow-md: 0 0 28px rgba(255, 217, 138, 0.42);
+  --fs-glow-lg: 0 0 64px rgba(255, 217, 138, 0.38);
+  --fs-shadow-card: 0 12px 32px rgba(0, 0, 0, 0.32);
+
+  /* ---- 动效 ---- */
+  --fs-t-fast: 170ms;
+  --fs-t: 300ms;
+  --fs-t-slow: 620ms;
+  --fs-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fs-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---- 字号 ---- */
+  --fs-fz-xs: 11px;
+  --fs-fz-sm: 12px;
+  --fs-fz-base: 14px;
+  --fs-fz-md: 16px;
+  --fs-fz-lg: 19px;
+  --fs-fz-xl: 24px;
+  --fs-fz-2xl: 32px;
+  --fs-fz-3xl: 44px;
+
+  /* ---- 字形 ---- */
+  --fs-font: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Noto Sans SC', sans-serif;
+  --fs-font-display: Georgia, 'Times New Roman', 'Songti SC', 'Noto Serif SC', serif;
+
+  /* ---- 布局 ---- */
+  --fs-tabbar-h: 58px;
+  --fs-safe-top: env(safe-area-inset-top, 0px);
+  --fs-safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  color-scheme: dark;
+}
+
+/* ============================ 书房主题 ============================ */
+
+:root[data-theme='theme_forest'] {
+  --fs-bg-top: #12261f;
+  --fs-bg-bottom: #060e0b;
+  --fs-glow: rgba(150, 240, 190, 0.15);
+  --fs-accent: #96e8b4;
+  --fs-accent-soft: rgba(150, 232, 180, 0.13);
+  --fs-accent-line: rgba(150, 232, 180, 0.3);
+  --fs-accent-deep: #4fb87c;
+  --fs-leaf: #8fdcae;
+  --fs-leaf-deep: #2f6b52;
+}
+
+:root[data-theme='theme_starry'] {
+  --fs-bg-top: #141b3c;
+  --fs-bg-bottom: #05060f;
+  --fs-glow: rgba(170, 190, 255, 0.18);
+  --fs-accent: #afc4ff;
+  --fs-accent-soft: rgba(175, 196, 255, 0.14);
+  --fs-accent-line: rgba(175, 196, 255, 0.32);
+  --fs-accent-deep: #6f86e0;
+}
+
+:root[data-theme='theme_rain'] {
+  --fs-bg-top: #101c2b;
+  --fs-bg-bottom: #050a11;
+  --fs-glow: rgba(160, 210, 255, 0.15);
+  --fs-accent: #9fd0ff;
+  --fs-accent-soft: rgba(159, 208, 255, 0.13);
+  --fs-accent-line: rgba(159, 208, 255, 0.3);
+  --fs-accent-deep: #5a94c9;
+}
+
+/* ============================ 萤火虫配色 ============================ */
+
+:root[data-firefly='firefly_cyan'] {
+  --fs-f1: #cff6ff;
+  --fs-f2: #7ee0f5;
+  --fs-f3: #2fa8c8;
+}
+:root[data-firefly='firefly_ember'] {
+  --fs-f1: #ffd3ae;
+  --fs-f2: #ff9e5e;
+  --fs-f3: #e0632f;
+}
+:root[data-firefly='firefly_violet'] {
+  --fs-f1: #e7d6ff;
+  --fs-f2: #b98cf0;
+  --fs-f3: #7a47c9;
+}
+:root[data-firefly='firefly_mint'] {
+  --fs-f1: #d6fbe6;
+  --fs-f2: #82e8b4;
+  --fs-f3: #35a972;
+}
+:root[data-firefly='firefly_sakura'] {
+  --fs-f1: #ffe1ec;
+  --fs-f2: #ffa8c6;
+  --fs-f3: #e0638f;
+}
+:root[data-firefly='firefly_aurora'] {
+  --fs-f1: #d8fff4;
+  --fs-f2: #7bf0d8;
+  --fs-f3: #4fa8ff;
+}
+
+/* ============================ 光合树形态 ============================ */
+
+:root[data-tree='tree_glow'] {
+  --fs-leaf: #a8f0c8;
+  --fs-leaf-deep: #3f9b73;
+  --fs-trunk: #7d6a52;
+}
+:root[data-tree='tree_crystal'] {
+  --fs-leaf: #cfe9ff;
+  --fs-leaf-deep: #5f86b8;
+  --fs-bloom: #eaf6ff;
+  --fs-trunk: #8d9cb5;
+}
+
+/* ============================ 低端机 / 省电：关掉常驻动画 ============================ */
+
+:root[data-motion='reduce'] .fs-drift,
+:root[data-motion='reduce'] .fs-breathe,
+:root[data-motion='reduce'] .fs-twinkle,
+:root[data-motion='reduce'] .fs-sway,
+:root[data-motion='reduce'] .fs-aurora {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full']) .fs-drift,
+  :root:not([data-motion='full']) .fs-breathe,
+  :root:not([data-motion='full']) .fs-twinkle,
+  :root:not([data-motion='full']) .fs-sway,
+  :root:not([data-motion='full']) .fs-aurora {
+    animation: none !important;
+  }
+}
+
+/* ============================ antd-mobile 变量接入 ============================ */
+
+:root,
+:root[data-prefers-color-scheme='dark'] {
+  --adm-color-primary: var(--fs-accent);
+  --adm-color-success: #82e8b4;
+  --adm-color-warning: #ffc46b;
+  --adm-color-danger: #ff8a7a;
+  --adm-color-white: #f4ecd8;
+  --adm-color-text: var(--fs-text);
+  --adm-color-text-secondary: var(--fs-text-2);
+  --adm-color-weak: var(--fs-text-3);
+  --adm-color-light: var(--fs-text-4);
+  --adm-color-border: var(--fs-line);
+  --adm-color-background: #0b1020;
+  --adm-color-box: rgba(255, 255, 255, 0.05);
+  --adm-color-fill-content: rgba(255, 255, 255, 0.06);
+  --adm-color-highlight: var(--fs-accent);
+  --adm-font-family: var(--fs-font);
+
+  --adm-button-border-radius: var(--fs-r-md);
+  --adm-center-popup-border-radius: var(--fs-r-lg);
+  --adm-popup-border-radius: var(--fs-r-lg);
+  --adm-dialog-border-radius: var(--fs-r-lg);
+  --adm-toast-border-radius: var(--fs-r-md);
+  --adm-input-font-size: var(--fs-fz-md);
+  --adm-font-size-main: var(--fs-fz-base);
+  --adm-tab-bar-item-color: var(--fs-text-3);
+  --adm-tab-bar-item-active-color: var(--fs-accent);
+  --adm-mask-background-color: rgba(4, 7, 14, 0.72);
+  --adm-color-mask: rgba(4, 7, 14, 0.72);
+}

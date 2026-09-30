@@ -1,0 +1,126 @@
+.onboard {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background:
+    radial-gradient(100% 52% at 50% 18%, var(--fs-glow) 0%, transparent 62%),
+    linear-gradient(180deg, #0b1120 0%, #070b14 52%, #04060c 100%);
+}
+
+.onboard__glow {
+  position: absolute;
+  left: 50%;
+  top: 16%;
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--fs-accent-soft) 0%, transparent 66%);
+  animation: fs-glow-pulse 7s ease-in-out infinite;
+}
+
+.onboard__flies {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.onboard__fly {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.onboard__core {
+  display: block;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, var(--fs-f1), var(--fs-f2) 58%, var(--fs-f3));
+  box-shadow: 0 0 10px 3px var(--fs-f2), 0 0 26px 9px var(--fs-f3);
+}
+
+.onboard__body {
+  position: relative;
+  z-index: 2;
+  padding: 0 var(--fs-s5) calc(var(--fs-safe-bottom) + var(--fs-s7));
+  text-align: center;
+  animation: fs-soft-in 520ms var(--fs-ease-out);
+}
+
+.onboard__title {
+  font-size: var(--fs-fz-2xl);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  margin: var(--fs-s4) 0 6px;
+}
+
+.onboard__slogan {
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-3);
+  letter-spacing: 0.06em;
+  margin: 0 0 var(--fs-s6);
+}
+
+.onboard__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--fs-s6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fs-s3);
+  text-align: left;
+}
+
+.onboard__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fs-s3);
+  padding: var(--fs-s3) var(--fs-s4);
+  border-radius: var(--fs-r-md);
+  background: var(--fs-card);
+  border: 1px solid var(--fs-line);
+}
+
+.onboard__list b {
+  display: block;
+  font-size: var(--fs-fz-base);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.onboard__list span:not(.onboard__icon) {
+  font-size: var(--fs-fz-sm);
+  color: var(--fs-text-3);
+  line-height: 1.7;
+}
+
+.onboard__icon {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--fs-r-sm);
+  display: grid;
+  place-items: center;
+  background: var(--fs-accent-soft);
+  color: var(--fs-accent);
+}
+
+.onboard__cta {
+  height: 52px;
+  width: 100%;
+  font-size: var(--fs-fz-md);
+  letter-spacing: 0.06em;
+}
+
+.onboard__sub {
+  margin-top: var(--fs-s3);
+  width: 100%;
+}
+
+.onboard__foot {
+  margin: var(--fs-s4) 0 0;
+  color: var(--fs-text-4);
+  line-height: 1.7;
+}

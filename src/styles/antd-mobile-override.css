@@ -1,0 +1,119 @@
+/* ==========================================================================
+   antd-mobile 外观微调
+   只做两件事：把组件圆角/配色拉进"书房"的调子，以及给弹层加一点光。
+   颜色变量本身在 tokens.css 里通过 --adm-* 覆盖。
+   ========================================================================== */
+
+.adm-popup-body {
+  color: var(--fs-text);
+}
+
+.adm-mask {
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+/* 底部弹层顶部的一道光 */
+.adm-popup-body-position-bottom {
+  box-shadow: 0 -20px 60px -30px var(--fs-accent);
+}
+
+/* 居中弹窗 */
+.adm-center-popup-body {
+  box-shadow: 0 24px 70px -28px rgba(0, 0, 0, 0.9), 0 0 0 1px var(--fs-line) inset;
+}
+
+.adm-center-popup-wrap {
+  max-width: 420px;
+}
+
+/* Dialog */
+.adm-dialog-body {
+  background: linear-gradient(180deg, #131b2e 0%, #0a0f1c 100%);
+  border: 1px solid var(--fs-line);
+}
+
+.adm-dialog-content {
+  color: var(--fs-text-2);
+  line-height: 1.75;
+}
+
+.adm-dialog-button {
+  color: var(--fs-text-2);
+}
+
+.adm-dialog-footer .adm-dialog-button-bold {
+  color: var(--fs-accent);
+  font-weight: 600;
+}
+
+.adm-dialog-header {
+  color: var(--fs-text);
+}
+
+/* Toast */
+.adm-toast-main {
+  background: rgba(20, 28, 46, 0.94);
+  border: 1px solid var(--fs-accent-line);
+  color: var(--fs-text);
+  box-shadow: 0 10px 30px -12px var(--fs-accent);
+  max-width: 78vw;
+  line-height: 1.7;
+  padding: 10px 16px;
+}
+
+.adm-toast-mask .adm-toast-main {
+  background: rgba(20, 28, 46, 0.94);
+}
+
+/* Switch / Slider 用主题色 */
+.adm-switch {
+  --checked-color: var(--fs-accent);
+  --height: 26px;
+  --width: 46px;
+}
+
+.adm-slider-thumb {
+  border-color: var(--fs-accent);
+}
+
+.adm-slider-fill {
+  background: var(--fs-accent);
+}
+
+/* 列表与输入 */
+.adm-list-item {
+  background: transparent;
+}
+
+.adm-list-body {
+  background: transparent;
+  border-top: none;
+  border-bottom: none;
+}
+
+.adm-list-item-content {
+  border-top: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.adm-input-element {
+  color: var(--fs-text);
+}
+
+.adm-input-element::placeholder {
+  color: var(--fs-text-4);
+}
+
+/* 图片查看器 / 进度条 */
+.adm-progress-bar-fill {
+  background: linear-gradient(90deg, var(--fs-f3), var(--fs-f1));
+}
+
+/* 页面级滚动条隐藏 */
+.adm-popup-body::-webkit-scrollbar,
+.fs-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

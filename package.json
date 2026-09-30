@@ -9,7 +9,9 @@
     "build": "vite build",
     "preview": "vite preview --host",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "node scripts/smoke-test.mjs",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "antd-mobile": "^5.43.0",
