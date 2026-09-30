@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN" data-prefers-color-scheme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0B1020" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="萤火书房" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta
+      name="description"
+      content="点亮一只萤火虫，书房就亮一点。萤火书房 —— 温柔不施压的阅读习惯养成 App。"
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <title>萤火书房</title>
+    <style>
+      /* 首屏兜底：在 JS 加载前就把底色铺成夜色，避免白屏闪一下 */
+      html,
+      body {
+        margin: 0;
+        background-color: #0b1020;
+        color: #f4ecd8;
+      }
+      #boot {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        background: radial-gradient(120% 80% at 50% 30%, #17203a 0%, #0b1020 62%, #070a15 100%);
+        z-index: 9;
+        transition: opacity 0.45s ease;
+      }
+      #boot.out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .boot-firefly {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #ffd98a;
+        box-shadow: 0 0 24px 8px rgba(255, 217, 138, 0.55);
+        animation: boot-breathe 2.4s ease-in-out infinite;
+      }
+      .boot-text {
+        font-size: 14px;
+        letter-spacing: 0.32em;
+        color: rgba(244, 236, 216, 0.5);
+        font-family: system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      }
+      @keyframes boot-breathe {
+        0%,
+        100% {
+          opacity: 0.28;
+          transform: scale(0.72);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.08);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="boot">
+      <div class="boot-firefly"></div>
+      <div class="boot-text">萤火书房</div>
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

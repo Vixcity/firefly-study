@@ -1,0 +1,26 @@
+{
+  "name": "firefly-study",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "萤火书房 —— 阅读习惯养成 App（移动端 PWA）",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "antd-mobile": "^5.43.0",
+    "dayjs": "^1.11.23",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.1",
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^5.0.3"
+  }
+}
