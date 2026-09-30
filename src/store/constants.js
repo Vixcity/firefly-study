@@ -98,3 +98,61 @@ export const REPORT_COPY = {
   small: (min, flies) => `这段时间你阅读了 ${min} 分钟，点亮 ${flies} 只萤火虫。微光汇聚，终成灯河。`,
   big: (min, flies) => `${min} 分钟，${flies} 只萤火虫。书房的灯，一直在你手里。`,
 }
+
+/**
+ * 新手引导：一步一步指着真实界面讲，而不是再给一张静态介绍页。
+ * target 是 CSS 选择器，引导会把它高亮出来；target 为 null 时居中显示。
+ * place 只是倾向 —— 空间不够时引导会自己翻到另一边。
+ */
+export const TOUR_STEPS = [
+  {
+    id: 'welcome',
+    target: null,
+    title: '欢迎来到萤火书房',
+    body: '这是一间夜晚的书房。每完成一次阅读，就点亮一只萤火虫；读得越多，房间越亮。这里没有排行榜，也没有"你已断签"。',
+    hint: '大概 30 秒就能看完，随时可以跳过',
+  },
+  {
+    id: 'cta',
+    target: '.study__cta',
+    place: 'top',
+    title: '从这儿开始读',
+    body: '点「开始阅读」进入全屏计时，支持暂停。当日累计读满 5 分钟就算点亮一只萤火虫 —— 门槛刻意设得很低，先让今天赢起来。',
+  },
+  {
+    id: 'streak',
+    target: '.study__streak',
+    place: 'top',
+    title: '萤火连击',
+    body: '连续点亮会累加连击。就算漏读，历史记录和历史最佳也不会清零，只是"萤火虫休息了一下"；休憩卡每月自动发一张，漏读当天会帮你护住连击。',
+  },
+  {
+    id: 'tree',
+    target: '.study__tree',
+    place: 'top',
+    title: '光合树',
+    body: '这株小树跟着你的累计阅读时长长大，每满 1 小时长一阶，一共 10 阶。它只长不落，很久没来也只是"睡着"，读一会儿就醒过来。',
+  },
+  {
+    id: 'points',
+    target: '.study__points',
+    place: 'bottom',
+    title: '光点',
+    body: '点亮 +10，每多读 5 分钟 +1，单日封顶 100，读完一本书 +50。光点在商店里能换萤火虫配色、书房主题和光合树形态，全部靠坚持获得。',
+  },
+  {
+    id: 'tabs',
+    target: '.tabbar',
+    place: 'top',
+    title: '五间屋子',
+    body: '书房看萤火虫和连击，书库管你在读的书，荣光收徽章和等级，报告看周月数据并生成分享卡，商店花光点。',
+  },
+  {
+    id: 'settings',
+    target: '.study__top .fs-iconbtn',
+    place: 'bottom',
+    title: '数据只在你手机上',
+    body: '这里没有账号、没有服务器，记录不会上传。右上角设置里可以开「每日提醒」、导出 JSON 备份，也可以随时重看这份引导。',
+    hint: '随时能从设置里重看',
+  },
+]

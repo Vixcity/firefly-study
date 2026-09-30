@@ -6,6 +6,7 @@ import { useReminder } from './hooks/useReminder'
 import { TabBar } from './components/layout/TabBar'
 import { ReadingFlow } from './components/ReadingFlow'
 import { RewardOverlay } from './components/RewardOverlay'
+import { TourOverlay } from './components/TourOverlay'
 import { StudyPage } from './pages/Study/StudyPage'
 import { BooksPage } from './pages/Books/BooksPage'
 import { BadgesPage } from './pages/Badges/BadgesPage'
@@ -59,7 +60,6 @@ export function Shell() {
         <OnboardPage
           onDone={() => {
             actions.finishOnboarding()
-            Toast.show({ content: '书房已经为你留好了位置', duration: 2400 })
           }}
           onStart={(withBook) => {
             actions.finishOnboarding()
@@ -88,6 +88,18 @@ export function Shell() {
       </main>
 
       <TabBar active={tab} onChange={setTab} badgeDot={hasNewBadges} />
+
+      {/* 新手引导巡览：首屏引导看完之后，在书房里指着真实界面走一遍。
+          引导的每一步都指向书房页的元素，所以只在书房页出现 ——
+          如果用户第一步选了"先加一本书"，就先让他去书库，回到书房时再引导。 */}
+      {state.onboarded && !state.tour.done && tab === 'study' ? (
+        <TourOverlay
+          onDone={() => {
+            actions.finishTour()
+            Toast.show({ content: '慢慢来，书房一直在这儿', duration: 2400 })
+          }}
+        />
+      ) : null}
 
       {/* 全屏沉浸计时 */}
       {state.reading ? <ReadingFlow onFinish={setReward} /> : null}

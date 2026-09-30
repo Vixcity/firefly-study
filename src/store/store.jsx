@@ -134,6 +134,12 @@ export function AppProvider({ children }) {
       /** 首屏引导看完 */
       finishOnboarding: () => update((s) => ({ ...s, onboarded: true }), { immediate: true }),
 
+      /** 新手引导巡览走完（或跳过） */
+      finishTour: () => update((s) => ({ ...s, tour: { ...s.tour, done: true } }), { immediate: true }),
+
+      /** 从设置里重看引导 */
+      restartTour: () => update((s) => ({ ...s, tour: { ...s.tour, done: false } }), { immediate: true }),
+
       /** 开始阅读 */
       startReading: (bookId = null) => {
         const now = nowMs()

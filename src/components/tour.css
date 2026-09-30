@@ -1,0 +1,152 @@
+/* ==========================================================================
+   新手引导巡览
+   ========================================================================== */
+
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  /* 只在左半边（手机容器）内生效，桌面宽屏时不会糊满整屏 */
+  display: flex;
+  justify-content: center;
+}
+
+/* 挖洞：用一个超大的 box-shadow 把高亮框四周压暗 */
+.tour__hole {
+  position: fixed;
+  border-radius: var(--fs-r-md);
+  box-shadow: 0 0 0 9999px rgba(3, 5, 10, 0.78);
+  border: 1.5px solid var(--fs-accent);
+  outline: 6px solid var(--fs-accent-soft);
+  transition: all 260ms var(--fs-ease-out);
+  pointer-events: none;
+}
+
+.tour__hole.is-active {
+  animation: fs-glow-pulse 4s ease-in-out infinite;
+}
+
+/* 没有可圈选目标时（第一步）用整屏遮罩 */
+.tour__dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 10, 0.82);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.tour__card {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - var(--fs-s5) * 2);
+  max-width: 460px;
+  padding: var(--fs-s4) var(--fs-s4) var(--fs-s3);
+  border-radius: var(--fs-r-lg);
+  background: linear-gradient(180deg, #151d31 0%, #0b1120 100%);
+  border: 1px solid var(--fs-accent-line);
+  box-shadow: 0 22px 60px -24px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  opacity: 0;
+  transition: opacity 220ms var(--fs-ease), top 260ms var(--fs-ease-out);
+}
+
+.tour__card.is-ready {
+  opacity: 1;
+  animation: fs-soft-in 260ms var(--fs-ease-out);
+}
+
+/* 居中（第一步） */
+.tour__card.is-center {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tour__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--fs-s2);
+}
+
+.tour__step {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-accent);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tour__skip {
+  font-size: var(--fs-fz-xs);
+  color: var(--fs-text-3);
+  padding: 4px 8px;
+  border-radius: var(--fs-r-full);
+  border: 1px solid var(--fs-line);
+}
+
+.tour__skip:active {
+  background: var(--fs-card);
+}
+
+.tour__title {
+  font-size: var(--fs-fz-md);
+  font-weight: 600;
+  margin: 0 0 6px;
+  letter-spacing: 0.01em;
+}
+
+.tour__body {
+  margin: 0;
+  font-size: var(--fs-fz-sm);
+  line-height: 1.9;
+  color: var(--fs-text-2);
+}
+
+.tour__hint {
+  margin: 8px 0 0;
+  color: var(--fs-text-4);
+}
+
+.tour__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fs-s3);
+  margin-top: var(--fs-s4);
+  padding-top: var(--fs-s3);
+  border-top: 1px solid var(--fs-line);
+}
+
+.tour__dots {
+  display: flex;
+  gap: 5px;
+  flex: none;
+}
+
+.tour__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  transition: all var(--fs-t-fast) var(--fs-ease);
+}
+
+.tour__dot.is-done {
+  background: var(--fs-accent-line);
+}
+
+.tour__dot.is-on {
+  width: 16px;
+  border-radius: var(--fs-r-full);
+  background: var(--fs-accent);
+  box-shadow: 0 0 8px var(--fs-accent);
+}
+
+.tour__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--fs-s2);
+}
+
+.tour__next {
+  min-width: 96px;
+}

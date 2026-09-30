@@ -65,6 +65,7 @@ export function normalize(raw) {
     : base.cosmetic.owned
   data.settings = { ...base.settings, ...(data.settings || {}) }
   data.reminder = { ...base.reminder, ...(data.reminder || {}) }
+  data.tour = { ...base.tour, ...(data.tour || {}) }
   data.reading = data.reading || null
   return data
 }

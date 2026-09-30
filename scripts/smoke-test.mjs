@@ -286,15 +286,101 @@ async function main() {
     assert('书已经放进书架', text.includes('夜航船'), text.slice(0, 0))
     await cdp.shot('02-books')
 
-    // ============================================================ 3. 开始阅读
-    console.log('\n[3] 开始阅读（计时）')
-    // 加完书会停在书库页，先回书房
-    await cdp.eval(`(() => {
-      const tab = [...document.querySelectorAll('.tabbar__item')].find((t) => (t.innerText || '').includes('书房'))
-      if (tab) tab.click()
-      return !!tab
-    })()`)
+    // ============================================================ 3. 布局与滚动
+    console.log('\n[3] 布局：滚动容器与底部 Tab 栏')
+    await goTab('书房')
+    const layout = await cdp.eval(`JSON.stringify((() => {
+      const sc = document.querySelector('.fs-scroll')
+      const tb = document.querySelector('.tabbar')
+      const tbr = tb.getBoundingClientRect()
+      return {
+        viewportH: window.innerHeight,
+        scrollClientH: sc.clientHeight,
+        scrollHeight: sc.scrollHeight,
+        scrollable: sc.scrollHeight - sc.clientHeight,
+        tabbarTop: Math.round(tbr.top),
+        tabbarBottom: Math.round(tbr.bottom),
+        tabbarInFlow: getComputedStyle(tb).position !== 'fixed',
+      }
+    })())`)
+    const L = JSON.parse(layout)
+    assert('滚动容器拿到确定高度（内容可滚动）', L.scrollable > 0, `可滚动 ${L.scrollable}px`)
+    assert(
+      'Tab 栏在 flex 流里，且正好贴在视口底部',
+      L.tabbarInFlow && Math.abs(L.tabbarBottom - L.viewportH) <= 1,
+      `bottom=${L.tabbarBottom} viewport=${L.viewportH}`
+    )
+    assert(
+      '滚动区高度 = 视口高度 − Tab 栏高度（内容不会被遮住）',
+      Math.abs(L.scrollClientH - L.tabbarTop) <= 1,
+      `scroll=${L.scrollClientH} tabbarTop=${L.tabbarTop}`
+    )
+
+    // 滚到底，最后一个元素必须完整露在 Tab 栏之上
+    await cdp.eval(`(() => { const sc = document.querySelector('.fs-scroll'); sc.scrollTop = sc.scrollHeight })()`)
     await sleep(700)
+    const atBottom = await cdp.eval(`JSON.stringify((() => {
+      const sc = document.querySelector('.fs-scroll')
+      const items = [...sc.querySelectorAll('.fs-page > *')]
+      const last = items[items.length - 1]
+      const r = last.getBoundingClientRect()
+      const tbr = document.querySelector('.tabbar').getBoundingClientRect()
+      return { lastBottom: Math.round(r.bottom), tabbarTop: Math.round(tbr.top) }
+    })())`)
+    const B = JSON.parse(atBottom)
+    assert('滚到底后末尾元素完整可见（没被 Tab 栏压住）', B.lastBottom <= B.tabbarTop + 1, `${B.lastBottom} <= ${B.tabbarTop}`)
+    await cdp.shot('03-layout-bottom')
+    await cdp.eval(`(() => { document.querySelector('.fs-scroll').scrollTop = 0 })()`)
+    await sleep(400)
+
+    // ============================================================ 4. 新手引导巡览
+    console.log('\n[4] 新手引导巡览')
+    await sleep(600)
+    const tourAppeared = await cdp.eval(`!!document.querySelector('.tour')`)
+    assert('首次进入书房时出现新手引导', tourAppeared)
+    const steps = await cdp.eval(`document.querySelectorAll('.tour__dot').length`)
+    assert('引导是多步的（指着真实界面讲）', steps >= 5, `${steps} 步`)
+    await cdp.shot('04-tour-step1')
+
+    let walked = 0
+    let tourOk = true
+    for (let i = 0; i < steps + 1; i += 1) {
+      const state = await cdp.eval(`JSON.stringify((() => {
+        const card = document.querySelector('.tour__card')
+        const hole = document.querySelector('.tour__hole')
+        const next = document.querySelector('.tour__next')
+        if (!card || !next) return { gone: true }
+        const cr = card.getBoundingClientRect()
+        const hr = hole && hole.style.display !== 'none' ? hole.getBoundingClientRect() : null
+        // 说明卡不能压在它高亮的那个元素上
+        const overlap = hr ? !(cr.bottom <= hr.top + 1 || cr.top >= hr.bottom - 1) : false
+        return {
+          title: document.querySelector('.tour__title').innerText,
+          inViewport: cr.top >= -1 && cr.bottom <= window.innerHeight + 1,
+          overlap,
+          next: next.innerText.replace(/\\s+/g, ''),
+        }
+      })())`)
+      const st = JSON.parse(state)
+      if (st.gone) break
+      walked += 1
+      if (!st.inViewport || st.overlap) {
+        tourOk = false
+        console.log(`      ✗ 第 ${walked} 步（${st.title}）位置异常 inViewport=${st.inViewport} overlap=${st.overlap}`)
+      }
+      if (walked === 2 || walked === steps) await cdp.shot(`04-tour-step${walked}`)
+      await cdp.eval(`(() => { document.querySelector('.tour__next').click() })()`)
+      await sleep(750)
+    }
+    assert('每一步的说明卡都在屏幕内、且不遮挡高亮元素', tourOk)
+    assert('走完所有步骤后引导自动关闭', !(await cdp.eval(`!!document.querySelector('.tour')`)), `共走 ${walked} 步`)
+    assert(
+      '进度已记录（不会每次进来都弹）',
+      await cdp.eval(`JSON.parse(localStorage.getItem('firefly-study:v1')).tour.done === true`)
+    )
+
+    // ============================================================ 5. 开始阅读
+    console.log('\n[5] 开始阅读（计时）')
     const readingBook = await cdp.eval(`(() => document.querySelector('.study__cta')?.innerText.trim() || '')()`)
     assert('书房页有开始阅读入口', readingBook.includes('开始阅读'), readingBook)
 
@@ -324,7 +410,7 @@ async function main() {
     assert('暂停后计时停住', !!tp1 && tp1 === tp2, `${tp1} = ${tp2}`)
 
     // 注入累计时长：把"已经读了 6 分钟"写进本地状态，然后重载
-    console.log('\n[4] 结算与点亮（注入 6 分钟累计时长）')
+    console.log('\n[6] 结算与点亮（注入 6 分钟累计时长）')
     await cdp.eval(`(() => {
       const key = 'firefly-study:v1'
       const s = JSON.parse(localStorage.getItem(key))
@@ -398,7 +484,7 @@ async function main() {
     assert('光点入账（点亮 10 + 时长 1）', gained === 11, `实得 +${gained}`)
     assert('解锁了初亮徽章', text.includes('初亮') || text.includes('新徽章'))
 
-    console.log('\n[5] 回到书房')
+    console.log('\n[7] 回到书房')
     assert('点「回到书房」', await clickText('回到书房'))
     await sleep(1000)
     text = await bodyText()
@@ -410,7 +496,7 @@ async function main() {
     await cdp.shot('06-study-lit')
 
     // ============================================================ 6. 数据持久化
-    console.log('\n[6] 刷新后数据不丢')
+    console.log('\n[8] 刷新后数据不丢')
     await open()
     await sleep(600)
     text = await bodyText()
@@ -418,7 +504,7 @@ async function main() {
     assert('刷新后今天仍是已点亮', text.includes('已点亮'))
 
     // ============================================================ 7. 商店兑换
-    console.log('\n[7] 光点商店兑换')
+    console.log('\n[9] 光点商店兑换')
     await cdp.eval(`(() => {
       const tab = [...document.querySelectorAll('.tabbar__item')].find((t) => (t.innerText || '').includes('商店'))
       if (tab) tab.click()
@@ -473,8 +559,8 @@ async function main() {
     assert('萤火虫配色已切换', themeApplied && themeApplied !== 'firefly_warm', themeApplied)
     await cdp.shot('08-shop-owned')
 
-    // ============================================================ 8. 徽章页
-    console.log('\n[8] 荣光与报告')
+    // ============================================================ 10. 徽章页
+    console.log('\n[10] 荣光与报告')
     await cdp.eval(`(() => {
       const tab = [...document.querySelectorAll('.tabbar__item')].find((t) => (t.innerText || '').includes('荣光'))
       if (tab) tab.click()
@@ -505,8 +591,8 @@ async function main() {
     assert('分享卡片生成成功', cardOk)
     await cdp.shot('11-sharecard')
 
-    // ============================================================ 9. 设置与导出
-    console.log('\n[9] 设置与备份')
+    // ============================================================ 11. 设置与导出
+    console.log('\n[11] 设置与备份')
     await cdp.eval(`(() => {
       const tab = [...document.querySelectorAll('.tabbar__item')].find((t) => (t.innerText || '').includes('书房'))
       if (tab) tab.click()
@@ -539,8 +625,8 @@ async function main() {
 
     await sleep(300)
 
-    // ============================================================ 10. 控制台干净
-    console.log('\n[10] 控制台')
+    // ============================================================ 12. 控制台干净
+    console.log('\n[12] 控制台')
     const realProblems = problems.filter(
       (p) => !p.includes('favicon') && !p.includes('DevTools') && !p.includes('Download the React DevTools')
     )

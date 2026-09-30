@@ -14,6 +14,9 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  /* 页面本身不滚动：滚动只发生在 .fs-scroll 里，
+     这样底部 Tab 栏永远贴在视口底部，不会被内容顶走 */
+  overflow: hidden;
   background: var(--fs-bg-bottom);
   color: var(--fs-text);
   font-family: var(--fs-font);
@@ -34,7 +37,10 @@ body {
 #root {
   width: 100%;
   max-width: 520px;
-  min-height: 100dvh;
+  /* 关键：必须给"确定高度"。用 min-height 的话内部滚动容器拿不到约束，
+     内容会跟着一起长高，然后被 overflow 裁掉 —— 页面就滚不动了。 */
+  height: 100vh;
+  height: 100dvh;
   position: relative;
   background:
     radial-gradient(120% 62% at 50% -8%, var(--fs-glow) 0%, transparent 62%),
@@ -74,15 +80,23 @@ textarea {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  /* 和 #root 等高：Tab 栏放在 flex 流里，滚动区拿剩余高度 */
+  height: 100%;
+  min-height: 0;
 }
 
 .fs-scroll {
-  flex: 1;
+  /* min-height:0 是关键：flex 子项默认 min-height:auto 会被内容撑开，
+     撑开之后就不再产生滚动条了 */
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(var(--fs-tabbar-h) + var(--fs-safe-bottom) + var(--fs-s6));
+  overscroll-behavior: contain;
+  /* Tab 栏已经在 flex 流里，这里只需要留出视觉呼吸空间，
+     末尾再补一段安全区，避免内容紧贴 Tab 栏 */
+  padding-bottom: var(--fs-s5);
 }
 
 .fs-scroll::-webkit-scrollbar,
@@ -101,13 +115,18 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 20;
+  /* 通栏：用负外边距抵消 .fs-page 的左右内边距，
+     这样吸顶时毛玻璃背景能铺满整屏宽度，文字位置又和下面内容对齐 */
+  margin: 0 calc(-1 * var(--fs-s4));
   padding: calc(var(--fs-safe-top) + var(--fs-s4)) var(--fs-s4) var(--fs-s3);
   display: flex;
   align-items: center;
   gap: var(--fs-s3);
-  background: linear-gradient(180deg, rgba(8, 12, 22, 0.94) 32%, rgba(8, 12, 22, 0));
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* 实心毛玻璃：渐变到透明会让下方滚过的文字透上来，看起来像渲染错误 */
+  background: linear-gradient(180deg, rgba(9, 13, 23, 0.97) 0%, rgba(9, 13, 23, 0.9) 100%);
+  box-shadow: 0 10px 20px -14px rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .fs-topbar__title {
@@ -390,10 +409,12 @@ textarea {
   gap: var(--fs-s3);
 }
 
-/* ============================ 安全区 ============================ */
+/* ============================ 页面收尾留白 ============================ */
 
+/* Tab 栏已经在 flex 流里并自己处理了安全区，
+   这里只需要给内容末尾一段舒适的呼吸空间 */
 .fs-safe-bottom {
-  height: calc(var(--fs-safe-bottom) + var(--fs-s3));
+  height: var(--fs-s5);
 }
 
 /* ============================ 弹层 ============================ */

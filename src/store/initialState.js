@@ -17,6 +17,8 @@ export function createInitialState(now = Date.now()) {
     updatedAt: now,
     /** 是否看过首屏引导 */
     onboarded: false,
+    /** 新手引导巡览的进度（可从设置里重看） */
+    tour: { done: false },
 
     /** 原始事实：每一次阅读 */
     sessions: [],

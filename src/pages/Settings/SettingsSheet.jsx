@@ -132,6 +132,29 @@ export function SettingsSheet({ visible, onClose }) {
         ) : null}
       </section>
 
+      {/* ---- 新手引导 ---- */}
+      <section className="settings__block">
+        <div className="row">
+          <div className="row__glyph">
+            <Icon name="compass" size={17} />
+          </div>
+          <div className="row__main">
+            <div className="row__title">新手引导</div>
+            <div className="row__sub">再看一遍书房里每个角落是做什么的</div>
+          </div>
+          <button
+            type="button"
+            className="fs-btn fs-btn--ghost fs-btn--sm"
+            onClick={() => {
+              onClose()
+              actions.restartTour()
+            }}
+          >
+            重看
+          </button>
+        </div>
+      </section>
+
       {/* ---- 动效 ---- */}
       <section className="settings__block">
         <div className="row">

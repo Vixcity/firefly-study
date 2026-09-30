@@ -1,10 +1,8 @@
 .tabbar {
-  position: fixed;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 520px;
+  /* 放在 .fs-app 的 flex 流里，而不是 position:fixed：
+     这样内容区的高度天然就是"视口高度 − Tab 栏高度"，内容永远不会被 Tab 栏压住 */
+  flex: 0 0 auto;
+  position: relative;
   z-index: 40;
   display: flex;
   padding: 6px 6px calc(var(--fs-safe-bottom) + 6px);

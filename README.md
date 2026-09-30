@@ -8,6 +8,7 @@
 - 形态：单页 H5 / PWA（可添加到手机主屏、离线可用）
 - 技术：React 19 + Vite 8 + antd-mobile 5 + dayjs + vite-plugin-pwa
 - 数据：全部存在浏览器本地（`localStorage`），无后端、无登录，支持导出 JSON 备份
+- 新手引导：首次进入是一屏欢迎页，接着在书房里用**聚光高亮**逐步讲 7 步，随时可从设置重看
 
 ---
 
@@ -113,11 +114,27 @@ src/
 │  ├─ DayDetailSheet.jsx    某一天的阅读详情（可修正、可撤回）
 │  ├─ ReadingFlow.jsx       全屏计时 + 结算表单
 │  ├─ RewardOverlay.jsx     点亮时刻的仪式感
+│  ├─ TourOverlay.jsx       新手引导巡览（聚光高亮 + 说明卡）
 │  └─ layout/TabBar.jsx     底部导航
 ├─ pages/                   书房 / 书库 / 荣光 / 报告 / 商店 / 设置 / 引导
 ├─ hooks/                   useNow / useThemeSync / useReminder
 └─ lib/                     date / format / id / rand / shareCard / antdReact19
 ```
+
+### 布局：三层高度链
+
+内容能滚动、Tab 栏永远贴底，靠的是一条**确定高度**的链条，改布局时别把它断掉：
+
+```
+html/body      height:100% + overflow:hidden   ← 页面本身不滚动
+   └ #root     height:100dvh + overflow:hidden ← 必须给确定高度（用 min-height 会滚不动）
+      └ .fs-app          height:100% + flex column
+         ├ .fs-scroll    flex:1 + min-height:0 + overflow-y:auto  ← 唯一滚动容器
+         └ .tabbar       flex:none（在 flex 流里，不用 position:fixed）
+```
+
+这样「滚动区高度 = 视口高度 − Tab 栏高度」是算出来的，不靠 `padding-bottom` 硬猜，
+内容不可能被 Tab 栏压住。冒烟测试里有 4 条断言专门守这条链条。
 
 更详细的设计取舍见 [DESIGN.md](./DESIGN.md)。
 
@@ -129,9 +146,12 @@ npm run dev         # 另开一个终端
 npm run test:e2e    # 端到端：驱动本机 Chrome 走完整闭环，截图输出到 .smoke/
 ```
 
-冒烟测试会真实走一遍：首次引导 → 加书 → 开始/暂停计时 → 结算点亮 → 光点入账 →
-萤火虫出现在书架 → 刷新后数据仍在 → 商店兑换并生效 → 徽章墙 → 报告与分享卡 → 设置与备份，
+冒烟测试会真实走一遍：首次引导 → 加书 → **布局与滚动校验** → **7 步新手引导** →
+开始/暂停计时 → 结算点亮 → 光点入账 → 萤火虫出现在书架 → 刷新后数据仍在 →
+商店兑换并生效 → 徽章墙 → 报告与分享卡 → 设置与备份，
 并断言浏览器控制台**没有报错**。计时相关的用例通过注入累计时长完成（不必真等 5 分钟）。
+
+当前共 **42 个单元测试 + 58 项端到端断言**。
 
 ## 浏览器支持
 
