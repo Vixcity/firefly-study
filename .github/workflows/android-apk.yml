@@ -39,8 +39,20 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: 装 Android 命令行工具
-        uses: android-actions/setup-android@v3
+      # 不用第三方 action：它内部写死的下载地址会失效，失败了还看不到日志。
+      # 这里直接拉 Google 官方的命令行工具（地址是实测 200 的），装到 $HOME 下。
+      - name: 装 Android SDK 命令行工具
+        run: |
+          SDK="$HOME/android-sdk"
+          mkdir -p "$SDK/cmdline-tools"
+          curl -fsSL -o /tmp/cmdline-tools.zip \
+            https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip
+          unzip -q /tmp/cmdline-tools.zip -d "$SDK/cmdline-tools"
+          mv "$SDK/cmdline-tools/cmdline-tools" "$SDK/cmdline-tools/latest"
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          echo "$SDK/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          "$SDK/cmdline-tools/latest/bin/sdkmanager" --version
 
       - name: 装编译需要的 SDK 组件
         run: |
