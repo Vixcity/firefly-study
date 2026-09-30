@@ -1,0 +1,12 @@
+{
+  "appId": "com.vixcity.fireflystudy",
+  "appName": "萤火书房",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#0B1020",
+    "allowMixedContent": false
+  }
+}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 自适应图标的底色：和 App 的夜色一致（模板原来给的是白色） -->
+    <color name="ic_launcher_background">#0B1020</color>
+</resources>

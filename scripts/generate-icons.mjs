@@ -5,7 +5,7 @@
  * 用法：node scripts/generate-icons.mjs
  */
 import { deflateSync } from 'node:zlib'
-import { writeFileSync, mkdirSync } from 'node:fs'
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -91,11 +91,15 @@ function addGlow(acc, dist, radius, color, strength) {
 /**
  * @param size 画布边长
  * @param maskable 是否生成"可裁切"版本（不留圆角、主体缩小到安全区）
+ * @param opts.round 圆形裁切（Android 的 ic_launcher_round）
+ * @param opts.transparent 只画萤火虫本体和光晕、不铺底色（自适应图标的前景层）
+ * @param opts.scale 主体缩放系数
  */
-function drawIcon(size, maskable = false) {
+function drawIcon(size, maskable = false, opts = {}) {
+  const { round = false, transparent = false, scale = 1 } = opts
   const buf = Buffer.alloc(size * size * 4)
-  const safe = maskable ? 0.78 : 1
-  const cornerR = maskable ? 0 : size * 0.225
+  const safe = (maskable ? 0.78 : 1) * scale
+  const cornerR = maskable || round ? 0 : size * 0.225
 
   // 主体参数（maskable 时整体缩小）
   const cx = size * 0.5
@@ -114,17 +118,21 @@ function drawIcon(size, maskable = false) {
       const u = (x + 0.5) / size
       const v = (y + 0.5) / size
 
-      // 1) 底色：上深下更深的夜色
+      // 1) 底色：上深下更深的夜色（前景层不铺底色）
       const t = clamp(v)
-      const acc = [
-        mix(COL.bgTop[0], COL.bgBottom[0], t),
-        mix(COL.bgTop[1], COL.bgBottom[1], t),
-        mix(COL.bgTop[2], COL.bgBottom[2], t),
-      ]
+      const acc = transparent
+        ? [0, 0, 0]
+        : [
+            mix(COL.bgTop[0], COL.bgBottom[0], t),
+            mix(COL.bgTop[1], COL.bgBottom[1], t),
+            mix(COL.bgTop[2], COL.bgBottom[2], t),
+          ]
 
       // 2) 墙面上的大范围暖光
-      const dRoom = Math.hypot(u - 0.5, v - 0.42)
-      addGlow(acc, dRoom, 0.6, COL.f3, 0.12)
+      if (!transparent) {
+        const dRoom = Math.hypot(u - 0.5, v - 0.42)
+        addGlow(acc, dRoom, 0.6, COL.f3, 0.12)
+      }
 
       // 3) 萤火虫的辉光（收得紧一点，读起来才像"一个光点"）
       const dx = (u - 0.5) * (size / size)
@@ -162,9 +170,15 @@ function drawIcon(size, maskable = false) {
         }
       }
 
-      // 7) 圆角裁切（非 maskable 版本）
+      // 7) 裁切：圆角（非 maskable 版本）、圆形（Android round 图标），
+      //    或者"按亮度取不透明度"（自适应图标的前景层，只留萤火虫和它的光晕）
       let alpha = 1
-      if (cornerR > 0) {
+      if (transparent) {
+        alpha = clamp(Math.max(acc[0], acc[1], acc[2]) * 1.35)
+      } else if (round) {
+        const d = Math.hypot(x + 0.5 - size / 2, y + 0.5 - size / 2)
+        alpha = clamp(size / 2 - d + 0.5)
+      } else if (cornerR > 0) {
         const rx = Math.min(x + 0.5, size - x - 0.5)
         const ry = Math.min(y + 0.5, size - y - 0.5)
         if (rx < cornerR && ry < cornerR) {
@@ -198,4 +212,40 @@ const targets = [
 for (const [file, size, maskable] of targets) {
   writeFileSync(file, drawIcon(size, maskable))
   console.log(`已生成 ${file.replace(resolve(__dirname, '..'), '.')} (${size}px${maskable ? ', maskable' : ''})`)
+}
+
+// ---------------------------------------------------------------- Android 图标
+/*
+ * 同一套画法再喂给 android/ 的 mipmap：方形图标、圆形图标、以及自适应图标的前景层。
+ * 只在 android/ 存在时才生成（只跑 H5 的用户不需要这些文件）。
+ * 密度对照：mdpi 1x / hdpi 1.5x / xhdpi 2x / xxhdpi 3x / xxxhdpi 4x。
+ */
+const ANDROID_RES = resolve(__dirname, '../android/app/src/main/res')
+
+if (existsSync(ANDROID_RES)) {
+  const densities = [
+    ['mdpi', 1],
+    ['hdpi', 1.5],
+    ['xhdpi', 2],
+    ['xxhdpi', 3],
+    ['xxxhdpi', 4],
+  ]
+
+  for (const [density, factor] of densities) {
+    const dir = resolve(ANDROID_RES, `mipmap-${density}`)
+    mkdirSync(dir, { recursive: true })
+
+    // 传统启动图标：48dp 基准
+    const legacy = Math.round(48 * factor)
+    writeFileSync(resolve(dir, 'ic_launcher.png'), drawIcon(legacy))
+    writeFileSync(resolve(dir, 'ic_launcher_round.png'), drawIcon(legacy, false, { round: true }))
+
+    // 自适应图标的前景层：108dp 基准，只留萤火虫 + 光晕，底色由 ic_launcher_background 给
+    const fg = Math.round(108 * factor)
+    writeFileSync(
+      resolve(dir, 'ic_launcher_foreground.png'),
+      drawIcon(fg, false, { transparent: true, scale: 0.9 })
+    )
+    console.log(`已生成 android/…/mipmap-${density}（${legacy}px + 前景 ${fg}px）`)
+  }
 }

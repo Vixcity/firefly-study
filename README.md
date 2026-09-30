@@ -61,6 +61,69 @@ npm run build          # 产物在 dist/，直接整目录上传即可
 因为构建时 `base: './'` 用的是相对路径，放在任意子目录都能跑。此时离线缓存完全生效，
 第一次打开之后即使断网也能用。
 
+## 打包成安卓 APK
+
+用 Capacitor 把 `dist/` 整个塞进 APK，由 WebView 直接读包内文件 ——
+**装完就是离线的**，数据存在手机本机，和浏览器版共用同一套代码与数据结构。
+
+### 方式一：让 GitHub 编（推荐，本机什么都不用装）
+
+推一个 commit 到 `main` 就会自动触发，或者到仓库 **Actions → Android APK → Run workflow** 手动跑。
+跑完在那次运行的页面底部下载 **`firefly-study-debug-apk`**，解压出来的 `app-debug.apk`
+传到手机点安装即可（需要允许「安装未知来源应用」）。
+
+### 方式二：在本机编
+
+需要两样东西：
+
+| 需要 | 说明 |
+|---|---|
+| **JDK 21** | Capacitor 8 的 android 工程编译级别是 Java 21，**JDK 17 编不过** |
+| **Android SDK** | 装个 Android Studio 最省事（它会自动配好 SDK 和 `local.properties`） |
+
+```bash
+npm run android:apk     # = build:native + cap sync android + gradlew assembleDebug
+# 产物：android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+| 命令 | 干什么 |
+|---|---|
+| `npm run android:apk` | 一条龙：构建 web 产物 → 同步进 android 工程 → 打 debug APK |
+| `npm run android:sync` | 只重新构建并同步（用 Android Studio 手动编之前跑这个） |
+| `npm run android:open` | 用 Android Studio 打开 `android/` 工程 |
+| `npm run icons` | 重新生成图标，同时写 `public/`（PWA）和 `android/`（mipmap） |
+
+**改了代码一定要重新 sync**，否则 APK 里跑的还是上一次的 web 产物；`android:apk` 已经串好了。
+
+### 两个产物别搞混
+
+| 命令 | 给谁用 | Service Worker |
+|---|---|---|
+| `npm run build` | 浏览器 / PWA（可加到主屏、离线缓存） | 有 |
+| `npm run build:native` | APK | **没有** |
+
+原生构建刻意关掉 SW（见 `vite.config.js`）：在原生壳里 SW 不但没用，
+还会把旧资源缓存住 —— 装了新版本 APK 打开还是老界面。
+
+### 正式包 / 签名
+
+上面出的都是 debug 包（自动用 debug keystore 签名，能直接装）。要上应用商店得自己签名：
+
+```bash
+cd android
+keytool -genkey -v -keystore firefly.keystore -alias firefly -keyalg RSA -keysize 2048 -validity 10000
+# 再在 android/app/build.gradle 里配 signingConfigs，然后 ./gradlew assembleRelease
+```
+
+### APK 和网页版的差异
+
+- **「导出 JSON 备份」和「生成分享卡」在 APK 里点了不会下载文件**：
+  Capacitor 的 WebView 没有实现 `DownloadListener`，`<a download>` / blob 下载会被忽略。
+  数据只在这台手机上，所以这个口子比较要紧 —— 要修就得加
+  `@capacitor/filesystem` + `@capacitor/share`，把下载改写成"写到应用目录再系统分享"。
+- **每日提醒只在应用开着的时候响**（和网页版一样是页面内 Toast）。
+  想要真正的系统通知，需要加 `@capacitor/local-notifications` 做本地定时通知。
+
 ## 数据与备份
 
 数据**只保存在这台设备的浏览器里**，不会上传到任何服务器。所以：
