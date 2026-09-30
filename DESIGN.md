@@ -54,9 +54,13 @@ html/body   height:100% + overflow:hidden    ← 页面本身不滚动
 |---|---|---|
 | `--fs-page-pad-top` | 顶部栏的上内边距（含刘海安全区） | `safe-top + 16px` |
 | `--fs-topbar-pad-bottom` | 顶部栏的下内边距（毛玻璃包住标题的那一圈） | 12px |
-| `--fs-topbar-gap` | 顶部栏与下面第一块内容的距离，**给的是下外边距** | 同 `--fs-page-pad-bottom`（28px） |
+| `--fs-topbar-gap` | 顶部栏与下面第一块内容的距离，**给的是下外边距** | 14px |
 | `--fs-page-gap` | 相邻区块之间的统一间距 | 16px |
-| `--fs-page-pad-bottom` | 滚动区底部留白（Tab 栏在流内，不用再补安全区） | 12px |
+| `--fs-page-pad-bottom` | 滚动区底部留白（Tab 栏在流内，不用再补安全区） | 28px |
+
+> `--fs-topbar-gap` 和 `--fs-page-pad-bottom` 是**两个独立的值**，别再互相引用：
+> 顶部那段夹在毛玻璃和第一张卡之间，两边都有边框/投影，14px 看起来才和区块之间的 16px 差不多；
+> 底部那段只有一层卡片收边，28px 才不显得被 Tab 栏切掉。
 
 规则落在 `base.css` 的两条选择器上：`.fs-page > * + *` 给区块之间统一间距，
 `.fs-page > .fs-topbar + *` 再把顶部栏后面那块的间距归零 —— 那一段距离由**顶部栏自己的下外边距**负责。
