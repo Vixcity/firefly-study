@@ -91,7 +91,7 @@
      取值和滚动区底部留白一致，一屏的上下呼吸感是对称的。 */
   --fs-topbar-gap: var(--fs-page-pad-bottom);
   --fs-page-gap: var(--fs-s4); /* 相邻区块之间的统一间距 */
-  --fs-page-pad-bottom: var(--fs-s6); /* 滚动区底部留白（Tab 栏在流内，不用再补安全区） */
+  --fs-page-pad-bottom: var(--fs-s3); /* 滚动区底部留白（Tab 栏在流内，不用再补安全区） */
 
   /* ---- 光效 ---- */
   --fs-glow-sm: 0 0 12px rgba(255, 217, 138, 0.35);
